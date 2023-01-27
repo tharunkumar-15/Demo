@@ -21,7 +21,7 @@ function SignupPage({navigation}) {
     createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       alert('User created successfully')
-      navigation.replace("userloginpage");
+      navigation.replace("Login");
     })
     .catch((error) => {
       const errorCode = error.code;

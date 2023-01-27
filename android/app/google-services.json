@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "67422949635",
+    "project_id": "conventia-application",
+    "storage_bucket": "conventia-application.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:67422949635:android:f27cb61777e70e88479936",
+        "android_client_info": {
+          "package_name": "com.conventia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "67422949635-7vjomrip0vo9qkq4aq8s896v0t1ragsn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtzgwRLdOe5N3kA9Qs0OEYWKt4fLfC4_M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "67422949635-7vjomrip0vo9qkq4aq8s896v0t1ragsn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

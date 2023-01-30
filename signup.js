@@ -45,11 +45,8 @@ function SignupPage({navigation}) {
   const signup=()=>{
     createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      alert('User created successfully')
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'userloginpage' }],
-      });
+      alert('User created successfully');
+      navigation.navigate('userloginpage')
     })
     .catch((error) => {
       const errorCode = error.code;

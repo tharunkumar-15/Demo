@@ -1,37 +1,52 @@
 import React,{useState,useEffect} from 'react'
-import {signInWithEmailAndPassword,onAuthStateChanged} from "firebase/auth";
+import {signInWithEmailAndPassword,onAuthStateChanged,sendPasswordResetEmail} from "firebase/auth";
 import  {auth} from './config'
 import { ReactNativeAsyncStorage } from 'firebase/auth';
 // import { AuthContext } from './AuthProvider';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Fontisto from 'react-native-vector-icons/Fontisto'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import{
   View,
   Text,
   StyleSheet,
   TextInput,
   Pressable,
+  Image,
 }from 'react-native'
-import { useNavigation } from '@react-navigation/native';
+// import { useNavigation } from '@react-navigation/native';
+import {Dimensions} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
-function LoginPage() {
-  const navigation = useNavigation();
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+function LoginPage({navigation}) {
+  // const navigation = useNavigation();
 
   const[email,setemail]=useState(null);
   const[password,setpassword]=useState(null);
 
 useEffect(()=>{
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
-      navigation.replace('UserPage')
-    }
-  });
-},[]);
-
-useEffect(()=>{
     getdata();
+
+    GoogleSignin.configure({
+      webClientId: '67422949635-q5vndsjn79ea1mu433u8ftusm4dvhiv0.apps.googleusercontent.com',
+      offlineAccess: false,
+    });
 },[])
+
+const handleGoogleSignIn = async () => {
+  try{
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true }); // <-- Add this
+    const { idToken } = await GoogleSignin.signIn().then(()=>navigation.navigate('UserPage'))
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    return auth().signInWithCredential(googleCredential);
+  } catch (error) {
+    // This will show you if GooglePlayServices is missing
+    console.log(error);
+  }
+  }
 
 const getdata=()=>{
      try
@@ -39,7 +54,10 @@ const getdata=()=>{
          AsyncStorage.getItem('UserData').then(value=>{
           if(value!=null)
           {
-             navigation.navigate('UserPage')
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'UserPage' }],
+            });
           }
          })
      }
@@ -49,16 +67,27 @@ const getdata=()=>{
      }
 }
 
+const forgotpassword=()=>{
+  sendPasswordResetEmail(auth, email)
+  .then(() => {
+    alert("Password reset email has been sent successfully")
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    alert(errorMessage);
+  });
+}
  const login=async()=>{
   var user={
             Email:email,
             Password:password,
-          };
+          };2
   await AsyncStorage.setItem('UserData',JSON.stringify(user));   
   signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     // alert('User Login successfully')
-    navigation.navigate("UserPage");
+    navigation.replace("UserPage");
   })
   .catch((error) => {
     const errorCode = error.code;
@@ -69,23 +98,35 @@ const getdata=()=>{
 
   return(
    <View style={styles.loginmainpage}>
-    <View style={styles.logincontainer}>
+    <ScrollView  contentContainerStyle={{ alignItems: 'center'}}>
+    <View style={styles.appcontainer}>
+    <Text style={styles.appname}>Conventia</Text>
+     <Image 
+        source={require('./Loginimage.jpg')}
+        style={styles.loginimage}
+        resizeMode='stretch'
+        />
+    </View>
       <Text style={styles.loginpagetext}>
           Login
       </Text>
-      <Text style={styles.emailtext}>
-        Email address:
-      </Text>
+    <View style={styles.iconcontainer}>
+      <View style={styles.icon}>
+      <Fontisto size={25} color={'black'} name='email'/>
+      </View>
       <TextInput 
        style={styles.emailfield}
        placeholder='Email'
-       placeholderTextColor='black' autoCapitalize='none'
+       placeholderTextColor='black'
+       autoCapitalize='none'
        autoCorrect={false}
        onChangeText={(email)=>setemail(email)}
-       />
-       <Text style={styles.emailtext}>
-        Password:
-      </Text>
+      />
+    </View>
+    <View style={styles.iconcontainer}>
+      <View style={styles.icon}>
+      <AntDesign size={25} color={'black'} name='lock'/>
+      </View>
       <TextInput 
        style={styles.emailfield}
        placeholder='Password'
@@ -95,18 +136,30 @@ const getdata=()=>{
        autoCorrect={false}
        onChangeText={(password)=>setpassword(password)}
        />
+      </View>
        <Pressable
         onPress={()=>login()}
        style={styles.submitbutton}
        >
-        <Text style={styles.submittext}>Submit</Text>
+        <Text style={styles.submittext}>Login</Text>
+       </Pressable>
+       <Text 
+       style={styles.forgotpassword}
+       onPress={()=>forgotpassword()}
+       >
+        Forgot Password?
+       </Text>
+       <Pressable onPress={()=>handleGoogleSignIn()}>
+                 <Text style={styles.googlebutton}>Sign in with Google</Text>
        </Pressable>
        <Text 
        style={styles.register}
-       onPress={()=>navigation.navigate('Signpage')}
-       >Dont have an account?Register</Text>
+       onPress={()=>
+        navigation.navigate('Signpage')
+      }
+       >Dont have an account?Create here</Text>
+       </ScrollView>
     </View>
-   </View>
 )
 }
 
@@ -118,54 +171,88 @@ const styles=StyleSheet.create({
     flex:1,
     justifyContent:'center',
     alignItems:'center',
+    backgroundColor:"#000075",
+    paddingTop:40,
    },
-   loginpagetext:{
+   appname:{
     fontWeight:'bold',
     fontSize:35,
-    color:'black',
+    marginBottom:20,
+    color:'white',
+  },
+  logincontainer:{
+    width:'100%',
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  loginimage:{
+    width:150,
+    height:150,
+    borderRadius:80,
+    marginBottom:20,
+  },
+   loginpagetext:{
+    fontWeight:'bold',
+    fontSize:27,
+    color:'white',
     marginBottom:15,
     textAlign:'center',
    },
-   logincontainer:{
+   emailfield:{
     width:'80%',
-    padding:20,
+    fontSize:16,
+    color:'black',
     justifyContent:'center',
     alignItems:'center',
-    backgroundColor:'white',
-    borderRadius:10,
-    paddingBottom:30,
-   },
-   emailfield:{
-    width:'100%',
-    borderWidth:1,
-    borderColor:'#555',
-    fontSize:15,
-    padding:10,
-    color:'black',
-    borderRadius:25,
-    borderColor:'rgba(0,0,0,0.2)'
-   },
-   emailtext:{
-    fontSize:23,
-    marginBottom:10,
-    color:'black'
+    paddingLeft:10,
    },
    submitbutton:{
-    backgroundColor:'black',
     padding:15,
-    paddingLeft:32,
-    paddingRight:32,
-    marginTop:20,
-    borderRadius:40,
-   },
-   submittext:{
-    textAlign:'center',
-    fontSize:27,
-    color:'white',
-   },
+    backgroundColor:"#131E3A",
+    width:'50%',
+    justifyContent:'center',
+    alignItems:'center',
+    borderRadius:30,
+    margin:15,
+  },
+  submittext:{
+     fontSize:20,
+     color:"white"
+  },
    register:{
-    color:'blue',
-    marginTop:15,
+    color:'white',
+    fontSize:17,
+    margin:15,
+   },
+   iconcontainer:{
+    marginTop:10,
+    marginBottom:20,
+    width: '95%',
+    borderColor: 'black',
+    borderRadius: 3,
+    borderWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    height: windowHeight / 15,
+   },
+   icon:{
+    padding: 10,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRightColor: 'black',
+    borderRightWidth: 1,
+    width:60,
+   },
+   forgotpassword:{
     fontSize:15,
+    color:'white',
+    marginTop:5,
+    marginBottom:5,
+   },
+   googlebutton:{
+    color:'red',
+    fontSize:20,
    }
 })

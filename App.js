@@ -6,9 +6,11 @@ import React,{useEffect,useState,useContext} from 'react';
 import LoginPage from './login';
 import SignupPage from './signup';
 import UserPage from './UserPage';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 function App() {
 
 const Stack = createNativeStackNavigator();
+const Tab1=createBottomTabNavigator();
 return(
  <NavigationContainer>
     <Stack.Navigator>
@@ -31,6 +33,7 @@ return(
       component={UserPage}
       />
     </Stack.Navigator>
+
  </NavigationContainer>
 );
 }

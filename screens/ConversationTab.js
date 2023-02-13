@@ -5,43 +5,51 @@ import{
     StyleSheet,
     Image,
     ScrollView,
+    Pressable,
 } from 'react-native';
+import CustomButton from '../CustomButton';
 function ConversationTab() {
   
   const convcards=[
-    {require:'../Loginimage.jpg',name:'Surya S',relation:'Friend',Date:'[19-01-23]consume tablets on time'},
-    {require:'../Loginimage.jpg',name:'Surya S',relation:'Friend',Date:'[19-01-23]consume tablets on time'},
-    {require:'../Loginimage.jpg',name:'Surya S',relation:'Friend',Date:'[19-01-23]consume tablets on time'},
-    {require:'../Loginimage.jpg',name:'Surya S',relation:'Friend',Date:'[19-01-23]consume tablets on time'},
-    {require:'../Loginimage.jpg',name:'Surya S',relation:'Friend',Date:'[19-01-23]consume tablets on time'},
+    {image:require('../Loginimage.jpg'),name:'Surya S',relation:'Friend',Date:'[19-01-23] consume tablets on time'},
+    {image:require('../Loginimage.jpg'),name:'Surya S',relation:'Friend',Date:'[19-01-23] consume tablets on time'},
+    {image:require('../Loginimage.jpg'),name:'Surya S',relation:'Friend',Date:'[19-01-23] consume tablets on time'},
+    {image:require('../Loginimage.jpg'),name:'Surya S',relation:'Friend',Date:'[19-01-23] consume tablets on time'},
+    {image:require('../Loginimage.jpg'),name:'Surya S',relation:'Friend',Date:'[19-01-23] consume tablets on time'},
   ]
 
 
 
   return (
-  <ScrollView>
     <View style={styles.usercontainer}>
+       <ScrollView  contentContainerStyle={{ alignItems: 'center'}}>
       <Text style={styles.welcometext}>Conversation Tab</Text>
       {
-        convcards.map(cards=>
-        <View style={styles.carddesign}>
+        convcards.map((cards,index)=>
+        <View style={styles.carddesign} key={index}>
           <Image
-          // source={cards.require}
+          source={cards.image}
           style={styles.cardimage}
-          resizeMode='stretch'
           />
           <View 
           style={styles.carddetails}
           >
-           <Text>Name:{cards.name}</Text>
-           <Text>Relation:{cards.relation}</Text>
-           <Text>Recordings:{cards.Date}</Text>
+           <Text style={styles.relativedetails}>Name: {cards.name}</Text>
+           <Text style={styles.relativedetails}>Relation: {cards.relation}</Text>
+           <Text style={styles.relativedetails}>Recordings: {cards.Date}</Text>
+           <Pressable
+           style={styles.buttonContainer}
+           >
+            <Text style={styles.buttonText}>
+              More Info
+            </Text>
+          </Pressable>
           </View>
         </View>
       )
     }
-    </View>
     </ScrollView>
+    </View>
   );
 }
 
@@ -52,25 +60,53 @@ const styles=StyleSheet.create({
         flex:1,
         backgroundColor:'#86c4b5',
         justifyContent:'center',
-        alignItems:'center',
-        paddingTop:30,
+        paddingBottom:120,
+        paddingTop:15,
     },
     welcometext:{
         textAlign:'center',
         fontSize:25,
         color:'black',
+        marginBottom:10,
     },
    
     carddesign:{
-      display:'flex',
-      width:'85%',
+      width:'90%',
       borderRadius:5,
-      backgroundColor:'grey',
+      backgroundColor:'#f8f6f3',
+      marginTop:15,
+      marginBottom:15,
       padding:10,
-      margin:10,
+      flexDirection:'row',
     },
     cardimage:{
-       width:150,
-       height:150,
+       width:125,
+       height:125,
+       borderRadius:80,
+    },
+    carddetails:{
+    flex: 1,
+    flexDirection: 'column',   
+    justifyContent: 'center',
+    padding:10,
+    },
+    relativedetails:{
+      fontSize:18,
+      color:'black',
+    },
+    buttonContainer: {
+      marginTop: 10,
+      width: '70%',
+      backgroundColor: '#131E3A',
+      padding: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 3,
+    },
+    buttonText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: '#ffffff',
+      fontFamily: 'Lato-Regular',
     },
 })

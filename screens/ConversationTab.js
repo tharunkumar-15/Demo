@@ -58,7 +58,7 @@ const styles=StyleSheet.create({
         flex:1,
         backgroundColor:'#86c4b5',
         justifyContent:'center',
-        // paddingBottom:120,
+        paddingBottom:120,
         paddingTop:15,
     },
     welcometext:{
@@ -105,6 +105,5 @@ const styles=StyleSheet.create({
       fontSize: 18,
       fontWeight: 'bold',
       color: '#ffffff',
-      fontFamily: 'Lato-Regular',
     },
 })

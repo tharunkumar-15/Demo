@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 const CustomTabBarButton = ({children, onPress}) => (
     <TouchableOpacity
     style={{
-        top:-30,
+        top:-15,
         justifyContent:'center',
         alignItems:'center',
         ...styles.shadow
@@ -36,14 +36,10 @@ const CustomTabBarButton = ({children, onPress}) => (
 const Tabs =() => {
     return(
         <Tab.Navigator screenOptions={{tabBarShowLabel:false, 
-            tabBarStyle:{position:"absolute", 
-            bottom:15,
-            left:5,
-            right:5,
+            tabBarStyle:{
             elevation:0,
             backgroundColor:'#041f60',
-            borderRadius:15,
-            height:90,
+            height:60,
              },
             //tabBarIconStyle:{display:"none"},
             headerShown:false,
@@ -52,7 +48,7 @@ const Tabs =() => {
         >
             <Tab.Screen name="Home" component={UserPage} options={{
                 tabBarIcon:({focused}) => (
-                    <View style={{alignItems: 'center', justifyContent: 'center', top:7}}>
+                    <View style={{alignItems: 'center', justifyContent: 'center', top:5}}>
                         <Image 
                             source={require('./home.png')}  
                             resizeMode='contain'
@@ -62,13 +58,13 @@ const Tabs =() => {
                                 tintColor:focused ? '#ffffff' : '#d9d9d9',
                             }}
                         />
-                        <Text style={{color:focused ? '#ffffff' : '#d9d9d9', fontSize: 11}}>Home</Text>
+                        <Text style={{color:focused ? '#ffffff' : '#d9d9d9', fontSize: 12}}>Home</Text>
                     </View>
                 ),
             }} />
             <Tab.Screen name="Conversation" component={ConversationTab} options={{
                 tabBarIcon:({focused}) => (
-                    <View style={{alignItems: 'center', justifyContent: 'center', top:7}}>
+                    <View style={{alignItems: 'center', justifyContent: 'center', top:5}}>
                         <Image 
                             source={require('./conversation.png')}  
                             resizeMode='contain'
@@ -78,7 +74,7 @@ const Tabs =() => {
                                 tintColor:focused ? '#ffffff' : '#d9d9d9',
                             }}
                         />
-                        <Text style={{color:focused ? '#ffffff' : '#d9d9d9', fontSize: 11}}>Conversation</Text>
+                        <Text style={{color:focused ? '#ffffff' : '#d9d9d9', fontSize: 12}}>Conversation</Text>
                     </View>
                 ),
             }}/>
@@ -92,7 +88,8 @@ const Tabs =() => {
                             style={{
                                 width:30,
                                 height:30,
-                                tintColor:'#041f60'
+                                tintColor:'#041f60',
+                                
                             }}
                             />
                     ),
@@ -104,7 +101,7 @@ const Tabs =() => {
 
             <Tab.Screen name="Add People" component={AddPeopleTab} options={{
                 tabBarIcon:({focused}) => (
-                    <View style={{alignItems: 'center', justifyContent: 'center', top:7}}>
+                    <View style={{alignItems: 'center', justifyContent: 'center', top:5}}>
                         <Image 
                             source={require('./AddUser.png')}  
                             resizeMode='contain'
@@ -114,13 +111,13 @@ const Tabs =() => {
                                 tintColor:focused ? '#ffffff' : '#d9d9d9',
                             }}
                         />
-                        <Text style={{color:focused ? '#ffffff' : '#d9d9d9', fontSize: 11}}>Add People</Text>
+                        <Text style={{color:focused ? '#ffffff' : '#d9d9d9', fontSize: 12}}>Add People</Text>
                     </View>
                 ),
             }}/>
             <Tab.Screen name="User Profile" component={UserProfileTab} options={{
                 tabBarIcon:({focused}) => (
-                    <View style={{alignItems: 'center', justifyContent: 'center', top:7}}>
+                    <View style={{alignItems: 'center', justifyContent: 'center', top:5}}>
                         <Image 
                             source={require('./user.png')}  
                             resizeMode='contain'
@@ -130,7 +127,7 @@ const Tabs =() => {
                                 tintColor:focused ? '#ffffff' : '#d9d9d9',
                             }}
                         />
-                        <Text style={{color:focused ? '#ffffff' : '#d9d9d9', fontSize: 11}}>Account</Text>
+                        <Text style={{color:focused ? '#ffffff' : '#d9d9d9', fontSize: 12}}>Account</Text>
                     </View>
                 ),
             }}/>

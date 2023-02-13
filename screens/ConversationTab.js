@@ -18,8 +18,6 @@ function ConversationTab() {
     {image:require('../Loginimage.jpg'),name:'Surya S',relation:'Friend',Date:'[19-01-23] consume tablets on time'},
   ]
 
-
-
   return (
     <View style={styles.usercontainer}>
        <ScrollView  contentContainerStyle={{ alignItems: 'center'}}>

@@ -62,7 +62,7 @@ const Tabs =() => {
                                 tintColor:focused ? '#ffffff' : '#d9d9d9',
                             }}
                         />
-                        <Text style={{color:focused ? '#ffffff' : '#d9d9d9', fontSize: 12}}>Home</Text>
+                        <Text style={{color:focused ? '#ffffff' : '#d9d9d9', fontSize: 11}}>Home</Text>
                     </View>
                 ),
             }} />
@@ -78,7 +78,7 @@ const Tabs =() => {
                                 tintColor:focused ? '#ffffff' : '#d9d9d9',
                             }}
                         />
-                        <Text style={{color:focused ? '#ffffff' : '#d9d9d9', fontSize: 12}}>Conversation</Text>
+                        <Text style={{color:focused ? '#ffffff' : '#d9d9d9', fontSize: 11}}>Conversation</Text>
                     </View>
                 ),
             }}/>
@@ -114,7 +114,7 @@ const Tabs =() => {
                                 tintColor:focused ? '#ffffff' : '#d9d9d9',
                             }}
                         />
-                        <Text style={{color:focused ? '#ffffff' : '#d9d9d9', fontSize: 12}}>Add People</Text>
+                        <Text style={{color:focused ? '#ffffff' : '#d9d9d9', fontSize: 11}}>Add People</Text>
                     </View>
                 ),
             }}/>
@@ -130,7 +130,7 @@ const Tabs =() => {
                                 tintColor:focused ? '#ffffff' : '#d9d9d9',
                             }}
                         />
-                        <Text style={{color:focused ? '#ffffff' : '#d9d9d9', fontSize: 12}}>Account</Text>
+                        <Text style={{color:focused ? '#ffffff' : '#d9d9d9', fontSize: 11}}>Account</Text>
                     </View>
                 ),
             }}/>

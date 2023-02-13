@@ -8,6 +8,7 @@ function CameraTab() {
   return (
     <View style={styles.usercontainer}>
       <Text style={styles.welcometext}>Welcome To Camera Tab</Text>
+      <Text style={styles.welcometext}>Press to launch camera</Text>
     </View>
   );
 }

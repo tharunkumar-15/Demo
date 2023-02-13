@@ -14,6 +14,7 @@ function ConversationTab() {
     {require:'../Loginimage.jpg',name:'Surya S',relation:'Friend',Date:'[19-01-23]consume tablets on time'},
     {require:'../Loginimage.jpg',name:'Surya S',relation:'Friend',Date:'[19-01-23]consume tablets on time'},
     {require:'../Loginimage.jpg',name:'Surya S',relation:'Friend',Date:'[19-01-23]consume tablets on time'},
+    {require:'../Loginimage.jpg',name:'Surya S',relation:'Friend',Date:'[19-01-23]consume tablets on time'},
   ]
 
 
@@ -53,7 +54,7 @@ const styles=StyleSheet.create({
         backgroundColor:'#86c4b5',
         justifyContent:'center',
         alignItems:'center',
-        paddingTop:30,
+       
     },
     welcometext:{
         textAlign:'center',

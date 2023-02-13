@@ -18,6 +18,7 @@ import{
 import {Dimensions} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import CustomButton from './CustomButton';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -137,12 +138,10 @@ const forgotpassword=()=>{
        onChangeText={(password)=>setpassword(password)}
        />
       </View>
-       <Pressable
-        onPress={()=>login()}
-       style={styles.submitbutton}
-       >
-        <Text style={styles.submittext}>Login</Text>
-       </Pressable>
+      <CustomButton
+      onPress={()=>login()}
+      buttonTitle="Login"
+      />
        <Text 
        style={styles.forgotpassword}
        onPress={()=>forgotpassword()}
@@ -206,19 +205,6 @@ const styles=StyleSheet.create({
     alignItems:'center',
     paddingLeft:10,
    },
-   submitbutton:{
-    padding:15,
-    backgroundColor:"#131E3A",
-    width:'50%',
-    justifyContent:'center',
-    alignItems:'center',
-    borderRadius:30,
-    margin:15,
-  },
-  submittext:{
-     fontSize:20,
-     color:"white"
-  },
    register:{
     color:'white',
     fontSize:17,

@@ -4,8 +4,7 @@ import{
   View,
   Text,
   TextInput,
-  Pressable,
-  TouchableOpacity,
+  Image,
   ScrollView,
 }from 'react-native';
 import {createUserWithEmailAndPassword } from "firebase/auth";
@@ -14,7 +13,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Dimensions} from 'react-native';
-
+import CustomButton from './CustomButton';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -23,24 +22,6 @@ function SignupPage({navigation}) {
   // const navigation = useNavigation();
   const[email,setemail]=useState();
   const[password,setpassword]=useState();
-   
-
-//   // const{signup}=useContext(AuthContext)
-//   GoogleSignIn.signIn()
-//     .then((data) => {
-//     const { idToken, accessToken } = data;
-//     const credential =auth.GoogleAuthProvider.credential(idToken, accessToken);
-//     return firebase.auth().signInWithCredential(credential);
-//     })
-//     .then(() => {
-//       navigation.reset({
-//         index: 0,
-//         routes: [{ name: 'UserPage' }],
-//       });
-//     })
-//     .catch((error) => {
-//          console.log(error)
-//     });
 
   const signup=()=>{
     createUserWithEmailAndPassword(auth, email, password)
@@ -59,6 +40,11 @@ function SignupPage({navigation}) {
     <ScrollView  contentContainerStyle={{ alignItems: 'center'}}>
     <View style={styles.appcontainer}>
     <Text style={styles.appname}>Conventia</Text>
+    <Image 
+        source={require('./Loginimage.jpg')}
+        style={styles.loginimage}
+        resizeMode='stretch'
+      />
     </View>
       <Text style={styles.loginpagetext}>
           SignUp
@@ -117,12 +103,10 @@ function SignupPage({navigation}) {
        onChangeText={(password)=>setpassword(password)}
        />
       </View>
-       <Pressable
-        onPress={()=>signup()}
-       style={styles.submitbutton}
-       >
-        <Text style={styles.submittext}>SignIn</Text>
-       </Pressable>
+      <CustomButton
+      onPress={()=>signup()}
+      buttonTitle="SignUp"
+      />
        </ScrollView>
     </View>
 )
@@ -171,19 +155,6 @@ const styles=StyleSheet.create({
     alignItems:'center',
     paddingLeft:10,
    },
-   submitbutton:{
-    padding:15,
-    backgroundColor:"#131E3A",
-    width:'50%',
-    justifyContent:'center',
-    alignItems:'center',
-    borderRadius:30,
-    margin:15,
-  },
-  submittext:{
-     fontSize:20,
-     color:"white"
-  },
    register:{
     color:'white',
     fontSize:17,

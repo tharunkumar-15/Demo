@@ -1,17 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import{
     View,
     Text,
     StyleSheet,
 } from 'react-native';
+import CustomButton from '../CustomButton';
+import { signOut } from 'firebase/auth';
+import { auth } from '../config';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 function UserProfileTab() {
+  const navigation = useNavigation();
+
+  const logout=()=>{
+    try{
+        signOut(auth).then(()=>{
+          AsyncStorage.removeItem('UserData');
+          navigation.navigate('userloginpage')
+        })
+      }
+        catch(error){
+          alert(error);
+        }
+    }
   return (
     <View style={styles.usercontainer}>
-      <Text style={styles.welcometext}>Welcome To User Profile Tab</Text>
+      <CustomButton buttonTitle='Sign Out' onPress={()=>logout()}/> 
     </View>
   );
 }
-
 export default UserProfileTab;
 
 const styles=StyleSheet.create({
@@ -25,12 +42,4 @@ const styles=StyleSheet.create({
         fontSize:25,
         color:'black',
     },
-    submitbutton:{
-      backgroundColor:'black',
-      padding:15,
-      paddingLeft:32,
-      paddingRight:32,
-      marginTop:20,
-      borderRadius:40,
-     },
 })

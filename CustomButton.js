@@ -14,7 +14,7 @@ export default CustomButton;
 const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 10,
-    width: '40%',
+    width: '45%',
     backgroundColor: '#131E3A',
     padding: 10,
     alignItems: 'center',
@@ -25,5 +25,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#ffffff',
+    textAlign:'center',
   },
 });

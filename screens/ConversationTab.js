@@ -7,7 +7,8 @@ import{
     ScrollView,
     Pressable,
 } from 'react-native';
-import CustomButton from '../CustomButton';
+
+
 function ConversationTab() {
   
   const convcards=[
@@ -58,7 +59,7 @@ const styles=StyleSheet.create({
         flex:1,
         backgroundColor:'#86c4b5',
         justifyContent:'center',
-        paddingBottom:120,
+        // paddingBottom:120,
         paddingTop:15,
     },
     welcometext:{
@@ -66,6 +67,7 @@ const styles=StyleSheet.create({
         fontSize:25,
         color:'black',
         marginBottom:10,
+        fontWeight:'bold',
     },
    
     carddesign:{
@@ -91,6 +93,7 @@ const styles=StyleSheet.create({
     relativedetails:{
       fontSize:18,
       color:'black',
+      fontWeight:'bold',
     },
     buttonContainer: {
       marginTop: 10,

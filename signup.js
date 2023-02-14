@@ -72,7 +72,6 @@ function SignupPage({navigation}) {
        placeholderTextColor='black'
        autoCapitalize='none'
        autoCorrect={false}
-       onChangeText={(password)=>setpassword(password)}
        />
       </View>
     <View style={styles.iconcontainer}>

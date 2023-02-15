@@ -7,12 +7,12 @@ import{
 function AddPeopleTab() {
   return (
     <View style={styles.usercontainer}>
-      <Text style={styles.welcometext}>Welcome To Add people Tab</Text>
+      <Text style={styles.welcometext}>Welcome To Add People Tab</Text>
     </View>
   );
 }
 
-export default AddPeopleTab;
+export default AddPeopleTab
 
 const styles=StyleSheet.create({
     usercontainer:{
@@ -20,7 +20,6 @@ const styles=StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
         backgroundColor:'#86c4b5',
-
     },
     welcometext:{
         fontSize:25,

@@ -7,7 +7,7 @@ import{
 } from 'react-native';
 import CustomButton from '../CustomButton';
 import PreviousConverstionTab from './PreviousConversationTab';
-import NewConverstionTab from './NewConversationTab';
+import NewConversationTab from './NewConversationTab';
 
 function CameraResultTab({navigation}) {
   return (
@@ -21,7 +21,7 @@ function CameraResultTab({navigation}) {
         <Text style={styles.detecteddetails}>Surya S</Text>
         <Text style={styles.detecteddetails}>Friend</Text>
         <CustomButton buttonTitle='Access Previous Conversations' onPress={()=> navigation.navigate(PreviousConverstionTab)}/>
-        <CustomButton buttonTitle='Start Recording a new Conversation' onPress={()=> navigation.navigate(NewConverstionTab)}/>
+        <CustomButton buttonTitle='Start Recording a new Conversation' onPress={()=>navigation.navigate(NewConversationTab)}/>
     </View>
   );
 }

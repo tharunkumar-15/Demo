@@ -3,7 +3,11 @@ import {Buffer} from 'buffer';
 import Permissions from 'react-native-permissions';
 import Sound from 'react-native-sound';
 import AudioRecord from 'react-native-audio-record';
-import {MotiView} from '@motify/components';
+import {LogBox} from 'react-native';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import { Pressable } from 'react-native';
+import { MotiView } from '@motify/components';
+import { Easing } from 'react-native-reanimated';
 import{
     View,
     Text,
@@ -13,8 +17,21 @@ import{
 } from 'react-native';
 
 
+// Ignore log notification by message:
+LogBox.ignoreLogs(['Warning: ...']);
+
+// Ignore all log notifications:
+LogBox.ignoreAllLogs();
+
 class NewConversationTab extends Component 
 {
+
+  constructor()
+  {
+    super();
+    this.state= {isStart:true}
+
+  }
   sound =null;
   state ={
     audioFile:'',
@@ -96,48 +113,95 @@ class NewConversationTab extends Component
     }); 
   };
 
-  play = async () => {
-    if(!this.state.loaded){
-      try{
-        await this.load();
-      } catch(error) {
-        console.log(error);
-      }
-    }
-    this.setState({paused: false});
-    Sound.setCategory('Playback');
+  // play = async () => {
+  //   if(!this.state.loaded){
+  //     try{
+  //       await this.load();
+  //     } catch(error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //   this.setState({paused: false});
+  //   Sound.setCategory('Playback');
 
-    this.sound.play(success => {
-      if(success) {
-        console.log('Successfully finished playing');
-      } else {
-        console.log('Playback failed due to audio decoding errors');
-      }
-      this.setState({paused: true});
-    });
-  };
+  //   this.sound.play(success => {
+  //     if(success) {
+  //       console.log('Successfully finished playing');
+  //     } else {
+  //       console.log('Playback failed due to audio decoding errors');
+  //     }
+  //     this.setState({paused: true});
+  //   });
+  // };
 
-  pause = () => {
-    this.sound.pause();
-    this.setState({paused: true});
-  };
+  // pause = () => {
+  //   this.sound.pause();
+  //   this.setState({paused: true});
+  // };
 
   render() {
     const {recording, paused, audioFile} = this.state;
+    if(this.state.isStart)
+    {
     return (
       <View style={styles.container}>
         <View style={styles.text}>
           <Button onPress={this.start} title="Record" disabled={recording} />
+
+          <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+            <Pressable style={[styles.dot, styles.center]} onPress={this.start}>
+            {/* <Pressable style={[styles.dot, styles.center]} onPress={(this.state.isStart)}> */}
+              {[...Array(3).keys()].map((index) =>{
+                return(
+                  <MotiView
+                    from={{ opacity:0.7, scale:1}}
+                    animate={{opacity:0, scale:4}}
+                    transition={{
+                      type:'timing',
+                      duration:2000,
+                      easing: Easing.out(Easing.ease),
+                      delay: index * 400,
+                      repeatReverse: false,
+                      loop: true,
+                    }}
+                  key={index}
+                  style={[StyleSheet.absoluteFillObject, styles.dot]}
+                  />
+                );
+              })}
+                <Icon name="microphone" size={32} color="#fff" />
+            </Pressable>
+        </View>
+
+
           <Button onPress={this.stop} title="Stop" disabled={!recording} />
-          {paused ? (
+          {/* {paused ? (
             <Button onPress={this.play} title="Play" disabled={!audioFile}/>
           ) :(
             <Button onPress={this.pause} title="Pause" disabled={!audioFile}/>
-          )}
-          
+          )} */}
+
         </View>
+      
       </View>
     );
+        }
+        else
+        {
+          return( 
+            <View style={styles.container}>
+            <View style={styles.text}>
+              <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+                <Pressable style={[styles.dot, styles.center]} onPress={(this.state.isStart)}>
+                    <Icon name="microphone" size={32} color="#fff" />
+                </Pressable>
+              </View>
+            </View>
+          
+          </View>
+        );
+          
+        }
   }
 
 }
@@ -154,4 +218,15 @@ const styles=StyleSheet.create({
         flexDirection:'row',
         justifyContent:'space-evenly',
     },
+
+    dot:{
+      width: 100,
+      height:100,
+      borderRadius:100,
+      backgroundColor: '#6E01EF'
+  },
+  center: {
+      alignItems:'center',
+      justifyContent:'center',
+  }
 })

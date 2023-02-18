@@ -1,11 +1,11 @@
 import React from 'react';
-import {Text,Pressable, StyleSheet} from 'react-native';
+import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 
-const CustomButton = ({buttonTitle, ...rest}) => {
+const CustomButton = ({buttonTitle = 'submit', buttonStyle = {}, ...rest}) => {
   return (
-    <Pressable style={styles.buttonContainer} {...rest}>
+    <TouchableOpacity style={[styles.buttonContainer, buttonStyle]} {...rest}>
       <Text style={styles.buttonText}>{buttonTitle}</Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 
@@ -14,17 +14,17 @@ export default CustomButton;
 const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 10,
-    width: '45%',
+    width: '40%',
     backgroundColor: '#131E3A',
     padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 3,
+    borderRadius: 5,
   },
   buttonText: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#ffffff',
-    textAlign:'center',
+    textAlign: 'center',
   },
 });

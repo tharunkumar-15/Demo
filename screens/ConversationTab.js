@@ -7,10 +7,11 @@ import{
     ScrollView,
     Pressable,
 } from 'react-native';
+import CustomButton from '../CustomButton';
+// import { useNavigation } from '@react-navigation/native';
 
-
-function ConversationTab() {
-  
+function ConversationTab({navigation}) {
+  // const navigation = useNavigation();
   const convcards=[
     {image:require('../Loginimage.jpg'),name:'Surya S',relation:'Friend',Date:'[19-01-23] consume tablets on time'},
     {image:require('../Loginimage.jpg'),name:'Surya S',relation:'Friend',Date:'[19-01-23] consume tablets on time'},
@@ -21,7 +22,7 @@ function ConversationTab() {
 
   return (
     <View style={styles.usercontainer}>
-       <ScrollView  contentContainerStyle={{ alignItems: 'center'}}>
+       <ScrollView  contentContainerStyle={{ alignItems: 'center'}} showsVerticalScrollIndicator={false}>
       <Text style={styles.welcometext}>Conversation Tab</Text>
       {
         convcards.map((cards,index)=>
@@ -36,13 +37,13 @@ function ConversationTab() {
            <Text style={styles.relativedetails}>Name: {cards.name}</Text>
            <Text style={styles.relativedetails}>Relation: {cards.relation}</Text>
            <Text style={styles.relativedetails}>Recordings: {cards.Date}</Text>
-           <Pressable
-           style={styles.buttonContainer}
-           >
-            <Text style={styles.buttonText}>
-              More Info
-            </Text>
-          </Pressable>
+          <CustomButton
+                 buttonTitle='More Info' 
+                 buttonStyle={{
+                 width:'75%',
+            }}
+            // onPress={navigation.navigate('PreviousConverstionTab')}
+          />
           </View>
         </View>
       )

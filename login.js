@@ -36,12 +36,12 @@ function LoginPage({navigation}) {
 
   useEffect(() => {
     getdata();
-
     // GoogleSignin.configure({
     //   webClientId:
     //     '67422949635-q5vndsjn79ea1mu433u8ftusm4dvhiv0.apps.googleusercontent.com',
     //   offlineAccess: false,
     // });
+    getuid();
   }, []);
 
   // const handleGoogleSignIn = async () => {
@@ -72,6 +72,17 @@ function LoginPage({navigation}) {
       alert(e);
     }
   };
+  const getuid = () => {
+    try {
+      AsyncStorage.getItem('UserUid').then(value => {
+        if (value != null) {
+          dispatch(setUser(value));
+        }
+      });
+    } catch (e) {
+      alert(e);
+    }
+  };
 
   const forgotpassword = () => {
     sendPasswordResetEmail(auth, email)
@@ -85,15 +96,15 @@ function LoginPage({navigation}) {
       });
   };
   const login = async () => {
-    var user1 = {
-      Email: email,
-      Password: password,
-    };
-
-    await AsyncStorage.setItem('UserData', JSON.stringify(user1));
     signInWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
+      .then(async userCredential => {
+        var user1 = {
+          Email: email,
+          Password: password,
+        };
+        await AsyncStorage.setItem('UserData', JSON.stringify(user1));
         dispatch(setUser(userCredential.user.uid));
+        await AsyncStorage.setItem('UserUid', userCredential.user.uid);
         navigation.replace('UserPage');
       })
       .catch(error => {

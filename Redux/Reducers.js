@@ -1,7 +1,7 @@
 import {SET_USER} from './Actions'
 
 const initialState={
-    user:'',  
+    user:'123456',  
 }
 
 function useReducer(state=initialState,action){

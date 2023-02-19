@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
 } from 'firebase/auth';
-import {auth} from './config';
-// import { AuthContext } from './AuthProvider';
+import { auth } from './config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -16,24 +15,25 @@ import {
   Pressable,
   Image,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 // import { useNavigation } from '@react-navigation/native';
-import {Dimensions} from 'react-native';
+import { Dimensions } from 'react-native';
 // import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import CustomButton from './CustomButton';
-import {useSelector, useDispatch} from 'react-redux';
-import {setUser} from './Redux/Actions';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUser } from './Redux/Actions';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-function LoginPage({navigation}) {
+function LoginPage({ navigation }) {
   // const navigation = useNavigation();
-  const {user} = useSelector(state => state.useReducer);
+  const { user } = useSelector(state => state.useReducer);
   const dispatch = useDispatch();
 
   const [email, setemail] = useState(null);
   const [password, setpassword] = useState(null);
-
+  const[isloaded,setisloaded]=useState(true);
   useEffect(() => {
     getdata();
     // GoogleSignin.configure({
@@ -62,9 +62,10 @@ function LoginPage({navigation}) {
     try {
       AsyncStorage.getItem('UserData').then(value => {
         if (value != null) {
+          setisloaded(false)
           navigation.reset({
             index: 0,
-            routes: [{name: 'UserPage'}],
+            routes: [{ name: 'UserPage' }],
           });
         }
       });
@@ -111,13 +112,19 @@ function LoginPage({navigation}) {
         const errorCode = error.code;
         const errorMessage = error.message;
         alert(errorMessage);
-      });
+      })
   };
 
   return (
     <View style={styles.loginmainpage}>
+      {isloaded?(
+        <View>
+          <ActivityIndicator size='large' color='#2196f3'/>
+        </View>
+      ):
+        (
       <ScrollView
-        contentContainerStyle={{alignItems: 'center'}}
+        contentContainerStyle={{ alignItems: 'center' }}
         showsVerticalScrollIndicator={false}>
         <View style={styles.appcontainer}>
           <Text style={styles.appname}>Conventia</Text>
@@ -169,6 +176,7 @@ function LoginPage({navigation}) {
           Dont have an account?Create here
         </Text>
       </ScrollView>
+      )}
     </View>
   );
 }

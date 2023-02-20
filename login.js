@@ -68,6 +68,10 @@ function LoginPage({ navigation }) {
             routes: [{ name: 'UserPage' }],
           });
         }
+        else
+        {
+          setisloaded(false)
+        }
       });
     } catch (e) {
       alert(e);

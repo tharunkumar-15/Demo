@@ -73,7 +73,7 @@ const styles=StyleSheet.create({
    
     carddesign:{
       width:'90%',
-      borderRadius:5,
+      borderRadius:10,
       backgroundColor:'#f8f6f3',
       marginTop:15,
       marginBottom:15,

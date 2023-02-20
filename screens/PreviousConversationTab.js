@@ -55,13 +55,8 @@ function PreviousConverstionTab() {
             <Text style={styles.details}>Relation: Friend</Text>
             <CustomButton
               buttonTitle="Remove Person"
-              style={{
+              buttonStyle={{
                 width: '77%',
-                backgroundColor: '#131E3A',
-                marginTop: 10,
-                padding: 10,
-                borderRadius: 4,
-                marginLeft: 15,
               }}
             />
           </View>
@@ -164,7 +159,7 @@ const styles = StyleSheet.create({
     width: '90%',
     padding: 18,
     marginBottom: 20,
-    borderRadius: 5,
+    borderRadius: 10,
     margin: 5,
   },
   remaininfo: {

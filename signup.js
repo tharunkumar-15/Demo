@@ -14,18 +14,25 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Dimensions} from 'react-native';
 import CustomButton from './CustomButton';
+import { doc, setDoc } from "firebase/firestore";
+import { db } from './config';
 
-const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 function SignupPage({navigation}) {
   // const navigation = useNavigation();
-  const [email, setemail] = useState();
-  const [password, setpassword] = useState();
+  const [userdetail, setuserdetail] = useState({
+    email:"",password:"",name:""
+  });
+  
 
   const signup = () => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
+    createUserWithEmailAndPassword(auth, userdetail.email, userdetail.password)
+      .then( userCredential => {
+         setDoc(doc(db, "Users", userCredential.user.uid), {
+          Email: userdetail.email,
+          Name: userdetail.name,
+        });
         alert('User created successfully');
         navigation.navigate('userloginpage');
       })
@@ -34,7 +41,7 @@ function SignupPage({navigation}) {
         const errorMessage = error.message;
         alert(errorMessage);
       });
-  };
+  };  
   return (
     <View style={styles.loginmainpage}>
       <ScrollView
@@ -60,7 +67,7 @@ function SignupPage({navigation}) {
             autoCapitalize="none"
             autoCorrect={false}
             keyboardType='email-address'
-            onChangeText={email => setemail(email)}
+            onChangeText={text => setuserdetail({...userdetail,email:text})}
           />
         </View>
         <View style={styles.iconcontainer}>
@@ -73,6 +80,7 @@ function SignupPage({navigation}) {
             placeholderTextColor="black"
             autoCapitalize="none"
             autoCorrect={false}
+            onChangeText={text => setuserdetail({...userdetail,name:text})}
           />
         </View>
         <View style={styles.iconcontainer}>
@@ -86,7 +94,7 @@ function SignupPage({navigation}) {
             secureTextEntry={true}
             autoCapitalize="none"
             autoCorrect={false}
-            onChangeText={password => setpassword(password)}
+            onChangeText={text => setuserdetail({...userdetail,password:text})}
           />
         </View>
         <View style={styles.iconcontainer}>
@@ -100,7 +108,7 @@ function SignupPage({navigation}) {
             secureTextEntry={true}
             autoCapitalize="none"
             autoCorrect={false}
-            onChangeText={password => setpassword(password)}
+            onChangeText={text => setuserdetail({...userdetail,password:text})}
           />
         </View>
         <CustomButton onPress={() => signup()} buttonTitle="SignUp" />

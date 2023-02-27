@@ -58,7 +58,7 @@ export default ConversationTab;
 const styles=StyleSheet.create({
     usercontainer:{
         flex:1,
-        backgroundColor:'#86c4b5',
+        backgroundColor:'#fff',
         justifyContent:'center',
         // paddingBottom:120,
         paddingTop:15,

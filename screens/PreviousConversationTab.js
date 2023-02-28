@@ -4,8 +4,9 @@ import CustomButton from '../CustomButton';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import ConversationModal from './ConversationModal';
 import {db} from '../config';
-import {doc, getDoc, collection, getDocs, query, where} from 'firebase/firestore';
+import {doc,collection, getDocs,deleteDoc} from 'firebase/firestore';
 import {useSelector} from 'react-redux';
+import {format} from 'date-fns';
 
 function PreviousConverstionTab() {
   const [icon, seticon] = useState(false);
@@ -21,76 +22,54 @@ function PreviousConverstionTab() {
   };
 
   useEffect(() => {
-   if(data.length<1)
-     ReadData();
+    ReadData();
   }, []);
 
   const ReadData = async () => {
     try {
-      const docRef = doc(db, 'Users', user);
-      const docSnap = await getDoc(docRef);
-    
-      if (docSnap.exists()) {
-        const userData = docSnap.data();
-  
-        // Get reference to the "Relatives" subcollection
-        const relativesRef = collection(db, 'Users', user, 'Relatives')
-        const relativesSnap = await getDocs(relativesRef);
-        console.log("relativesnap:",relativesSnap)
-          const conversationsRef = collection(db, 'Users', user, 'Relatives',"uUvRiipoUTGqRSD6UAUF", 'RecordedConversation');
-          const conversationsSnap = await getDocs(conversationsRef);
-        
-          const conversationsData = conversationsSnap.docs.map((conversationDoc) => {
-            console.log("Summary:",conversationDoc.data())
-            setdata((previousState)=>{
-              return [...previousState,conversationDoc.data()];
-            })
-        });
-      } 
-      else {
-        console.log('No such document!');
-      }
+      const conversationsRef = collection(
+        db,
+        'Users',
+        user,
+        'Relatives',
+        'uUvRiipoUTGqRSD6UAUF',
+        'RecordedConversation',
+      );
+      const conversationsSnap = await getDocs(conversationsRef);
+      const conversationsData = conversationsSnap.docs.map(conversationDoc => ({
+        ...conversationDoc.data(),
+        id: conversationDoc.id,
+      }));
+      setdata(conversationsData);
     } catch (error) {
       console.log('Tharun', error);
     }
   };
   
-  const infos = [
-    {
-      date: '[19-02-23]',
-      remainder:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus acultrices enim. Proin volutpat sem et nunc commodo, ac vestibulum urnaconsequat. Sed scelerisque, quam vel efficitur pretium, est elit commododio, quis iaculis mi quam id urna.',
-    },
-    {
-      date: '[19-02-23]',
-      remainder:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus acultrices enim. Proin volutpat sem et nunc commodo, ac vestibulum urnaconsequat. Sed scelerisque, quam vel efficitur pretium, est elit commododio, quis iaculis mi quam id urna.',
-    },
-    {
-      date: '[19-02-23]',
-      remainder:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus acultrices enim. Proin volutpat sem et nunc commodo, ac vestibulum urnaconsequat. Sed scelerisque, quam vel efficitur pretium, est elit commododio, quis iaculis mi quam id urna.',
-    },
-    {
-      date: '[19-02-23]',
-      remainder:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus acultrices enim. Proin volutpat sem et nunc commodo, ac vestibulum urnaconsequat. Sed scelerisque, quam vel efficitur pretium, est elit commododio, quis iaculis mi quam id urna.',
-    },
-    {
-      date: '[19-02-23]',
-      remainder:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus acultrices enim. Proin volutpat sem et nunc commodo, ac vestibulum urnaconsequat. Sed scelerisque, quam vel efficitur pretium, est elit commododio, quis iaculis mi quam id urna.',
-    },
-  ];
+  const deleterelative = async docid => {
+    try {
+      const conversationRef = doc(
+        db,
+        'Users',
+        user,
+        'Relatives',
+        'uUvRiipoUTGqRSD6UAUF',
+        'RecordedConversation',
+        docid,
+      );
+      await deleteDoc(conversationRef).then(()=>{
+      alert('Deleted Data Successfully');
+      setdata(prevData => prevData.filter(item => item.id !== docid));
+    });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
   return (
     <View style={styles.usercontainer}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Text style={styles.welcometext}>Previous Converstions</Text>
-        {data.map((conversation, index) => (
-          <View key={index}>
-            <Text>{conversation.Summary}</Text>
-          </View>
-        ))}
         <View style={styles.relativedetails}>
           <Image
             source={require('../Loginimage.jpg')}
@@ -102,29 +81,41 @@ function PreviousConverstionTab() {
             <CustomButton
               buttonTitle="Remove Person"
               buttonStyle={{
-                width: '77%',
+                width: '65%',
+                marginLeft: 10,
+              }}
+              textstyle={{
+                fontSize: 15,
               }}
             />
           </View>
         </View>
         <Text style={styles.details}>Recordings</Text>
-        <Text>{data.Summary}</Text>
         <View style={styles.recordingdetails}>
-          {infos.map((info, index) => (
+          {data.map((info, index) => (
             <View key={index} style={styles.cards}>
               <Text style={styles.remaininfo} numberOfLines={2}>
-                {info.date} {info.remainder}
+                {info.SummaryDate?.seconds && (
+                  <Text style={styles.remaininfo} numberOfLines={2}>
+                    {format(
+                      new Date(info.SummaryDate.seconds * 1000),
+                      'MMM d, yyyy h:mm a',
+                    )}
+                    : {info.Summary}
+                  </Text>
+                )}
               </Text>
               <View style={styles.logostyle}>
                 <AntDesign
                   size={25}
-                  color={'black'}
+                  color={'white'}
                   name="delete"
                   style={{marginTop: 15}}
+                  onPress={() => deleterelative(info.id)}
                 />
                 <AntDesign
                   size={25}
-                  color={'black'}
+                  color={'white'}
                   name={icon ? 'star' : 'staro'}
                   style={{marginTop: 15, marginLeft: 20}}
                   onPress={() => iconhandler()}
@@ -134,6 +125,10 @@ function PreviousConverstionTab() {
                     buttonTitle="MoreInfo"
                     buttonStyle={{
                       width: '65%',
+                      backgroundColor: '#f95999',
+                    }}
+                    textstyle={{
+                      fontSize: 15,
                     }}
                     onPress={() => modalHandler()}
                   />
@@ -144,7 +139,7 @@ function PreviousConverstionTab() {
                   animationType="fade"
                   transparent={true}>
                   <ConversationModal
-                    conversation={info.remainder}
+                    conversation={info.Summary}
                     modalhandler={modalHandler}
                   />
                 </Modal>
@@ -164,12 +159,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-<<<<<<< HEAD
-    backgroundColor: '#86c4b5',
-=======
     backgroundColor: '#fff',
-    paddingTop: 25,
->>>>>>> e159713ee84c12e758ba14fe1da73cc31736218c
   },
   welcometext: {
     fontSize: 25,
@@ -177,6 +167,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingBottom: 20,
     paddingTop: 20,
+    textAlign: 'center',
   },
   relativedetails: {
     flex: 1,
@@ -207,7 +198,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cards: {
-    backgroundColor: '#f8f6f3',
+    backgroundColor: '#51087E',
     width: '90%',
     padding: 18,
     marginBottom: 20,
@@ -215,7 +206,7 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   remaininfo: {
-    color: 'black',
+    color: 'white',
     fontWeight: 'bold',
     fontSize: 15,
   },

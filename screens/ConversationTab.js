@@ -12,12 +12,14 @@ import {db} from '../config';
 import {doc, getDoc,collection,getDocs} from 'firebase/firestore';
 // import { useNavigation } from '@react-navigation/native';
 import {useSelector} from 'react-redux';
+import { da } from 'date-fns/locale';
 
 function ConversationTab({navigation}) {
   // const navigation = useNavigation();
   const {user} = useSelector(state => state.useReducer);
   const[data,setdata]=useState([])
   useEffect(() => {
+    if(data.length<1)
     ReadData();
   }, []);
 
@@ -34,31 +36,18 @@ function ConversationTab({navigation}) {
   //     console.log("Tharun",error);
   //   }
   // };
-
   const ReadData = async () => {
     try {
-      const docRef = doc(db, 'Users', user);
-      const docSnap = await getDoc(docRef);
-  
-      if (docSnap.exists()) {
-        const userData = docSnap.data();
-  
-        // Get reference to the "Relatives" subcollection
         const relativesRef = collection(db, 'Users', user, 'Relatives');
         const relativesSnap = await getDocs(relativesRef);
-  
-        const relativesData = relativesSnap.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-  
-        console.log(userData, relativesData);
-        setdata(relativesData);
-      } else {
-        console.log('No such document!');
-      }
+        const relativesData = relativesSnap.docs.map((relativeDoc) => {
+          // console.log("Summary:",conversationDoc.data())
+          setdata((previousState)=>{
+            return [...previousState,relativeDoc.data()];
+          })
+      });
     } catch (error) {
-      console.log('Tharun', error);
+      console.log(error);
     }
   };
 
@@ -80,7 +69,8 @@ function ConversationTab({navigation}) {
               <CustomButton
                 buttonTitle="More Info"
                 buttonStyle={{
-                  width: '75%',
+                  width: '80%',
+                  backgroundColor:"#f95999"
                 }}
               />
             </View>
@@ -101,36 +91,6 @@ const styles=StyleSheet.create({
         // paddingBottom:120,
         paddingTop:15,
     },
-    welcometext:{
-        textAlign:'center',
-        fontSize:25,
-        color:'black',
-        marginBottom:10,
-        fontWeight:'bold',
-    },
-   
-    carddesign:{
-      width:'90%',
-      borderRadius:10,
-      backgroundColor:'#f8f6f3',
-      marginTop:15,
-      marginBottom:15,
-      padding:10,
-      flexDirection:'row',
-    },
-    cardimage:{
-       width:125,
-       height:125,
-       borderRadius:80,
-    },
-    carddetails:{
->>>>>>> e159713ee84c12e758ba14fe1da73cc31736218c
-    flex: 1,
-    backgroundColor: '#86c4b5',
-    justifyContent: 'center',
-    // paddingBottom:120,
-    paddingTop: 15,
-  },
   welcometext: {
     textAlign: 'center',
     fontSize: 25,
@@ -138,11 +98,10 @@ const styles=StyleSheet.create({
     marginBottom: 10,
     fontWeight: 'bold',
   },
-
   carddesign: {
     width: '90%',
     borderRadius: 10,
-    backgroundColor: '#f8f6f3',
+    backgroundColor: '#51087E',
     marginTop: 15,
     marginBottom: 15,
     padding: 10,
@@ -161,7 +120,8 @@ const styles=StyleSheet.create({
   },
   relativedetails: {
     fontSize: 18,
-    color: 'black',
+    color: 'white',
+    margin:7,
     fontWeight: 'bold',
   },
   buttonContainer: {

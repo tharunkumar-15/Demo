@@ -123,7 +123,7 @@ function LoginPage({ navigation }) {
     <View style={styles.loginmainpage}>
       {isloaded?(
         <View>
-          <ActivityIndicator size='large' color='#2196f3'/>
+          <ActivityIndicator size='large' color='#ffffff'/>
         </View>
       ):
         (
@@ -167,7 +167,14 @@ function LoginPage({ navigation }) {
             onChangeText={password => setpassword(password)}
           />
         </View>
-        <CustomButton onPress={() => login()} buttonTitle="Login" />
+        <CustomButton 
+        onPress={() => login()} 
+        buttonStyle={{
+          backgroundColor:'#f95999',
+          margin:10,
+        }}
+        buttonTitle="Login" 
+        />
         <Text style={styles.forgotpassword} onPress={() => forgotpassword()}>
           Forgot Password?
         </Text>
@@ -192,7 +199,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000075',
+    backgroundColor: '#51087E',
     paddingTop: 40,
   },
   appname: {

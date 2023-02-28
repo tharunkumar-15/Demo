@@ -20,12 +20,19 @@ function CameraResultTab({navigation}) {
         buttonStyle={{
           width: '50%',
         }}
+        textstyle={{
+          fontSize:16,
+        }}
         onPress={() => navigation.navigate(PreviousConverstionTab)}
       />
       <CustomButton
         buttonTitle="Start Recording a new Conversation"
         buttonStyle={{
           width: '50%',
+          padding:12,
+        }}
+        textstyle={{
+          fontSize:16,
         }}
         onPress={() => navigation.navigate(NewConverstionTab)}
       />

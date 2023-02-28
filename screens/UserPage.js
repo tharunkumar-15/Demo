@@ -8,7 +8,7 @@ function UserPage() {
   return (
     <View style={styles.usercontainer}>
       <Text style={styles.welcometext}>Welcome To Home Tab</Text>
-      <Text>{user}</Text>
+      <Text style={{color:'black'}}>{user}</Text>
     </View>
   );
 }

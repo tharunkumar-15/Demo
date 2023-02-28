@@ -4,7 +4,7 @@ import CustomButton from '../CustomButton';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import ConversationModal from './ConversationModal';
 import {db} from '../config';
-import {doc, getDoc, collection, getDocs} from 'firebase/firestore';
+import {doc, getDoc, collection, getDocs, query, where} from 'firebase/firestore';
 import {useSelector} from 'react-redux';
 
 function PreviousConverstionTab() {
@@ -21,7 +21,8 @@ function PreviousConverstionTab() {
   };
 
   useEffect(() => {
-    ReadData();
+   if(data.length<1)
+     ReadData();
   }, []);
 
   const ReadData = async () => {
@@ -33,26 +34,18 @@ function PreviousConverstionTab() {
         const userData = docSnap.data();
   
         // Get reference to the "Relatives" subcollection
-        const relativesRef = collection(db, 'Users', user, 'Relatives');
+        const relativesRef = collection(db, 'Users', user, 'Relatives')
         const relativesSnap = await getDocs(relativesRef);
         console.log("relativesnap:",relativesSnap)
-        const relativesData = relativesSnap.docs.map(async (doc) => {
-          // Get reference to the "RecordedConversation" subcollection
-          console.log(doc.id)
-          const conversationsRef = collection(db, 'Users', user, 'Relatives', "uUvRiipoUTGqRSD6UAUF", 'RecordedConversation');
+          const conversationsRef = collection(db, 'Users', user, 'Relatives',"uUvRiipoUTGqRSD6UAUF", 'RecordedConversation');
           const conversationsSnap = await getDocs(conversationsRef);
         
-          const conversationsData = conversationsSnap.docs.map((conversationDoc) => ({
-            ...conversationDoc.data(),
-            id: conversationDoc.id,
-          }));
-  
-          console.log('Relative ID:', doc.id, 'Recorded Conversations:', conversationsData);
-          setdata(conversationsData);
+          const conversationsData = conversationsSnap.docs.map((conversationDoc) => {
+            console.log("Summary:",conversationDoc.data())
+            setdata((previousState)=>{
+              return [...previousState,conversationDoc.data()];
+            })
         });
-  
-        console.log('User Data:', userData);
-        console.log('Relatives Data:', relativesData);
       } 
       else {
         console.log('No such document!');

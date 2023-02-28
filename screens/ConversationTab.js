@@ -93,8 +93,38 @@ function ConversationTab({navigation}) {
 
 export default ConversationTab;
 
-const styles = StyleSheet.create({
-  usercontainer: {
+const styles=StyleSheet.create({
+    usercontainer:{
+        flex:1,
+        backgroundColor:'#fff',
+        justifyContent:'center',
+        // paddingBottom:120,
+        paddingTop:15,
+    },
+    welcometext:{
+        textAlign:'center',
+        fontSize:25,
+        color:'black',
+        marginBottom:10,
+        fontWeight:'bold',
+    },
+   
+    carddesign:{
+      width:'90%',
+      borderRadius:10,
+      backgroundColor:'#f8f6f3',
+      marginTop:15,
+      marginBottom:15,
+      padding:10,
+      flexDirection:'row',
+    },
+    cardimage:{
+       width:125,
+       height:125,
+       borderRadius:80,
+    },
+    carddetails:{
+>>>>>>> e159713ee84c12e758ba14fe1da73cc31736218c
     flex: 1,
     backgroundColor: '#86c4b5',
     justifyContent: 'center',

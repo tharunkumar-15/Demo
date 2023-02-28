@@ -164,7 +164,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+<<<<<<< HEAD
     backgroundColor: '#86c4b5',
+=======
+    backgroundColor: '#fff',
+    paddingTop: 25,
+>>>>>>> e159713ee84c12e758ba14fe1da73cc31736218c
   },
   welcometext: {
     fontSize: 25,

@@ -19,7 +19,6 @@ function ConversationTab({navigation}) {
   const {user} = useSelector(state => state.useReducer);
   const[data,setdata]=useState([])
   useEffect(() => {
-    if(data.length<1)
     ReadData();
   }, []);
 

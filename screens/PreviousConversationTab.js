@@ -4,26 +4,37 @@ import CustomButton from '../CustomButton';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import ConversationModal from './ConversationModal';
 import {db} from '../config';
-import {doc,collection, getDocs,deleteDoc} from 'firebase/firestore';
+import {
+  doc,
+  collection,
+  getDocs,
+  deleteDoc,
+  updateDoc,
+} from 'firebase/firestore';
 import {useSelector} from 'react-redux';
 import {format} from 'date-fns';
 
 function PreviousConverstionTab() {
   const [icon, seticon] = useState(false);
-  const [modal, setmodal] = useState(false);
+  const [modalStates, setModalStates] = useState([]);
   const [data, setdata] = useState([]);
   const {user} = useSelector(state => state.useReducer);
-  const modalHandler = () => {
-    setmodal(previousState => !previousState);
-  };
 
-  const iconhandler = () => {
-    seticon(previousState => !previousState);
+  const modalHandler = index => {
+    setModalStates(prevStates => {
+      const newStates = [...prevStates];
+      newStates[index] = !newStates[index];
+      return newStates;
+    });
   };
 
   useEffect(() => {
     ReadData();
   }, []);
+
+  // useEffect(()=>{
+  //     // imporconv();
+  // },[icon])
 
   const ReadData = async () => {
     try {
@@ -41,11 +52,12 @@ function PreviousConverstionTab() {
         id: conversationDoc.id,
       }));
       setdata(conversationsData);
+      setModalStates(new Array(conversationsData.length).fill(false));
     } catch (error) {
       console.log('Tharun', error);
     }
   };
-  
+
   const deleterelative = async docid => {
     try {
       const conversationRef = doc(
@@ -57,15 +69,43 @@ function PreviousConverstionTab() {
         'RecordedConversation',
         docid,
       );
-      await deleteDoc(conversationRef).then(()=>{
-      alert('Deleted Data Successfully');
-      setdata(prevData => prevData.filter(item => item.id !== docid));
-    });
+      await deleteDoc(conversationRef).then(() => {
+        alert('Deleted Data Successfully');
+        setdata(prevData => prevData.filter(item => item.id !== docid));
+      });
     } catch (error) {
       console.log(error);
     }
   };
-  
+
+  const imporconv = async (docid, currentImportantState) => {
+    try {
+      const Imporconv = doc(
+        db,
+        'Users',
+        user,
+        'Relatives',
+        'uUvRiipoUTGqRSD6UAUF',
+        'RecordedConversation',
+        docid,
+      );
+      await updateDoc(Imporconv, {
+        Important: !currentImportantState,
+      });
+      setdata(prevData =>
+        prevData.map(info => {
+          if (info.id === docid) {
+            return {...info, Important: !currentImportantState};
+          } else {
+            return info;
+          }
+        }),
+      );
+    } catch (error) {
+      console.log('Suhas:', error);
+    }
+  };
+
   return (
     <View style={styles.usercontainer}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -116,10 +156,11 @@ function PreviousConverstionTab() {
                 <AntDesign
                   size={25}
                   color={'white'}
-                  name={icon ? 'star' : 'staro'}
+                  name={info.Important ? 'star' : 'staro'}
                   style={{marginTop: 15, marginLeft: 20}}
-                  onPress={() => iconhandler()}
+                  onPress={() => imporconv(info.id, info.Important)}
                 />
+
                 <View style={styles.buttonstyles}>
                   <CustomButton
                     buttonTitle="MoreInfo"
@@ -130,17 +171,17 @@ function PreviousConverstionTab() {
                     textstyle={{
                       fontSize: 15,
                     }}
-                    onPress={() => modalHandler()}
+                    onPress={() => modalHandler(index)}
                   />
                 </View>
                 <Modal
-                  visible={modal}
-                  onRequestClose={() => setmodal(false)}
+                  visible={modalStates[index]}
+                  onRequestClose={() => modalHandler(index)}
                   animationType="fade"
                   transparent={true}>
                   <ConversationModal
                     conversation={info.Summary}
-                    modalhandler={modalHandler}
+                    modalhandler={() => modalHandler(index)}
                   />
                 </Modal>
               </View>

@@ -4,7 +4,7 @@ import{
     Text,
     StyleSheet,
 } from 'react-native';
-function NewConverstionTab() {
+function NewConversationTab() {
   return (
     <View style={styles.usercontainer}>
       <Text style={styles.welcometext}>Welcome To New Converstion Tab</Text>
@@ -12,7 +12,7 @@ function NewConverstionTab() {
   );
 }
 
-export default  NewConverstionTab
+export default  NewConversationTab
 
 const styles=StyleSheet.create({
     usercontainer:{

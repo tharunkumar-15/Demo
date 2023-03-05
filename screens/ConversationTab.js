@@ -9,10 +9,9 @@ import {
 } from 'react-native';
 import CustomButton from '../CustomButton';
 import {db} from '../config';
-import {doc, getDoc,collection,getDocs} from 'firebase/firestore';
+import {collection,getDocs} from 'firebase/firestore';
 // import { useNavigation } from '@react-navigation/native';
 import {useSelector} from 'react-redux';
-import { da } from 'date-fns/locale';
 
 function ConversationTab({navigation}) {
   // const navigation = useNavigation();
@@ -39,17 +38,15 @@ function ConversationTab({navigation}) {
     try {
         const relativesRef = collection(db, 'Users', user, 'Relatives');
         const relativesSnap = await getDocs(relativesRef);
-        const relativesData = relativesSnap.docs.map((relativeDoc) => {
-          // console.log("Summary:",conversationDoc.data())
-          setdata((previousState)=>{
-            return [...previousState,relativeDoc.data()];
-          })
-      });
+        const relativesData = relativesSnap.docs.map(relativeDoc => ({
+          ...relativeDoc.data(),
+          id:relativeDoc.id
+        }))
+        setdata(relativesData);
     } catch (error) {
       console.log(error);
     }
   };
-
   return (
     <View style={styles.usercontainer}>
       <ScrollView
@@ -71,6 +68,7 @@ function ConversationTab({navigation}) {
                   width: '80%',
                   backgroundColor:"#f95999"
                 }}
+                // onPress={() => navigation.navigate('UserProfileTab')}
               />
             </View>
           </View>

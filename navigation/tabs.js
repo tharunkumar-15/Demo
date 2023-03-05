@@ -6,7 +6,8 @@ import CameraTab from '../screens/CameraTab';
 import ConversationTab from '../screens/ConversationTab';
 import UserPage from '../screens/UserPage';
 import UserProfileTab from '../screens/UserProfileTab';
-import { StyleSheet,Text,View,Image,TouchableOpacity } from 'react-native';
+import CameraResultTab from '../screens/CameraResultTab';
+import { StyleSheet,Text,View,Image,TouchableOpacity} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -79,7 +80,7 @@ const Tabs =() => {
                 ),
             }}/>
 
-            <Tab.Screen name="Camera" component={CameraTab} options={{
+            <Tab.Screen name="Camera" component={CameraResultTab} options={{
                 tabBarIcon:({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', top:5}}>
                         <Image 
@@ -129,7 +130,7 @@ const Tabs =() => {
                             }}
                         />
                         <Text style={{color:focused ? '#ffffff' : '#9F8BCC', fontSize: 12}}>Add People</Text>
-                    </View>
+                    </View> 
                 ),
             }}/>
 

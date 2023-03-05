@@ -6,6 +6,7 @@ import ConversationTab from '../screens/ConversationTab';
 import UserPage from '../screens/UserPage';
 import UserProfileTab from '../screens/UserProfileTab';
 import { StyleSheet,Text,View,Image,TouchableOpacity } from 'react-native';
+import CameraResultTab from '../screens/CameraResultTab';
 
 const Tab = createBottomTabNavigator();
 
@@ -77,27 +78,22 @@ const Tabs =() => {
                     </View>
                 ),
             }}/>
-
-            <Tab.Screen name="Camera" component={CameraTab} 
-                options={{
-                    tabBarIcon: ({focused}) => (
-                        <Image
-                            source={require('./camera.png')}
-                            resizeMode="contain"
-                            style={{
-                                width:30,
-                                height:30,
-                                tintColor:'#041f60',
-                                
+            <Tab.Screen name="Camera" component={CameraResultTab} options={{
+                tabBarIcon:({focused}) => (
+                    <View style={{alignItems: 'center', justifyContent: 'center', top:5}}>
+                        <Image 
+                            source={require('./camera.png')}  
+                            resizeMode='contain'
+                            style ={{
+                                width:25,
+                                height:25,
+                                tintColor:focused ? '#ffffff' : '#d9d9d9',
                             }}
-                            />
-                    ),
-                    tabBarButton: (props) => (
-                        <CustomTabBarButton {...props} />
-                    )
-                }}
-            />
-
+                        />
+                        <Text style={{color:focused ? '#ffffff' : '#d9d9d9', fontSize: 12}}>Camera</Text>
+                    </View>
+                ),
+            }}/>
             <Tab.Screen name="Add People" component={AddPeopleTab} options={{
                 tabBarIcon:({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', top:5}}>

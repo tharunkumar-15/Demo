@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import CustomButton from '../CustomButton';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { MotiView } from '@motify/components';
 import { Easing } from 'react-native-reanimated';

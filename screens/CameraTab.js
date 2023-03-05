@@ -3,17 +3,18 @@ import {createStackNavigator} from '@react-navigation/stack';
 import CameraResultTab from './CameraResultTab';
 import PreviousConverstionTab from './PreviousConversationTab';
 import NewConversationTab from './NewConversationTab';
+import { Text } from 'moti';
 
 const Stack= createStackNavigator();
 
 function CameraTab() {
   return (
-    <Stack.Navigator screenOptions={{header:()=>null}}>
-      <Stack.Screen name="CameraResultTab" component={CameraResultTab} />
-      <Stack.Screen name="PreviousConverstionTab" component={PreviousConverstionTab} />
-      <Stack.Screen name="NewConversationTab" component={NewConversationTab} />
+    // <Stack.Navigator screenOptions={{header:()=>null}}>
+    //   <Stack.Screen name="CameraResultTab" component={CameraResultTab} />
+      
 
-    </Stack.Navigator>
+    // </Stack.Navigator>
+    <Text>Hello</Text>
   );
 }
 

@@ -9,10 +9,10 @@ const Stack = createStackNavigator();
 function CameraTab() {
   return (
       <Stack.Navigator screenOptions={{header: () => null}}>
-      <Stack.Screen name="ImageCapture" component={ImageCapture}/>
-      <Stack.Screen name="CameraResultTab" component={CameraResultTab} />
-      <Stack.Screen name="NewConversationTab" component={NewConversationTab} />
-      <Stack.Screen
+       {/* <Stack.Screen name="ImageCapture" component={ImageCapture}/> */}
+       <Stack.Screen name="CameraResultTab" component={CameraResultTab} />
+       <Stack.Screen name="NewConversationTab" component={NewConversationTab} />
+       <Stack.Screen
         name="PreviousConverstionTab"
         component={PreviousConverstionTab}
       />

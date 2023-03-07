@@ -80,7 +80,7 @@ const Tabs =() => {
                 ),
             }}/>
 
-            <Tab.Screen name="Camera" component={CameraResultTab} options={{
+            <Tab.Screen name="Camera" component={CameraTab} options={{
                 tabBarIcon:({focused}) => (
                     <View style={{alignItems: 'center', justifyContent: 'center', top:5}}>
                         <Image 

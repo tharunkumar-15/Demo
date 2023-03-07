@@ -46,5 +46,12 @@ const styles = StyleSheet.create({
     center: {
         alignItems:'center',
         justifyContent:'center',
-    }
+        alignItems:'center',
+        backgroundColor:'#fff',
+
+    },
+    welcometext:{
+        fontSize:25,
+        color:'black',
+    },
 })

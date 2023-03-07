@@ -2,36 +2,32 @@ import React, {useState, useEffect} from 'react';
 import {Buffer} from 'buffer';
 import Permissions from 'react-native-permissions';
 import AudioRecord from 'react-native-audio-record';
-import{
-    View,
-    PermissionsAndroid,
-    Button,
-    Pressable,
-    StyleSheet,
+import {
+  View,
+  PermissionsAndroid,
+  Button,
+  Pressable,
+  StyleSheet,
 } from 'react-native';
-import { MotiView } from '@motify/components';
-import { Easing } from 'react-native-reanimated';
+import {MotiView} from '@motify/components';
+import {Easing} from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 
-const NewConversationTab = () => {
-  
+const NewConversationTab = ({navigation}) => {
   const [audioFile, setAudioFile] = useState('');
   // const [loaded, setLoaded] = useState(false);
   // let sound = null;
 
   const [recording, setRecording] = useState(false);
 
-  const animationHandler = ()=>
-  {
-    setRecording(!recording)
-  }
+  const animationHandler = () => {
+    setRecording(!recording);
+  };
 
-  useEffect(()=>{
-    if(recording)
-    start()
-    else
-    stop()
-  },[recording])
+  useEffect(() => {
+    if (recording) start();
+    else stop();
+  }, [recording]);
 
   useEffect(() => {
     const initAudioRecord = async () => {
@@ -45,7 +41,7 @@ const NewConversationTab = () => {
 
       AudioRecord.init(options);
 
-      AudioRecord.on('data', (data) => {
+      AudioRecord.on('data', data => {
         const chunck = Buffer.from(data, 'base64');
       });
     };
@@ -57,8 +53,7 @@ const NewConversationTab = () => {
       PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
       {
         title: 'Microphone Permission',
-        message:
-          'Needs access to your microphone',
+        message: 'Needs access to your microphone',
         buttonNeutral: 'Ask me Later',
         buttonNegative: 'Cancel',
         buttonPositive: 'OK',
@@ -116,48 +111,51 @@ const NewConversationTab = () => {
   //   sound.play();
   // };
 
-
   return (
-    
-      <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-            <Pressable style={[styles.dot, styles.center]}>
-              {recording && [...Array(3).keys()].map((index) =>{
-                return(
-                  <MotiView
-                    from={{ opacity:0.7, scale:1}}
-                    animate={{opacity:0, scale:4}}
-                    transition={{
-                      type:'timing',
-                      duration:2000,
-                      easing: Easing.out(Easing.ease),
-                      delay: index * 400,
-                      repeatReverse: false,
-                      loop: true,
-                    } }
-                  key={index}
-                  style={[StyleSheet.absoluteFillObject, styles.dot]}
-                  />
-                );
-              })}
-                <Icon name="microphone" size={32} color="#fff" onPress={animationHandler}/>
-            </Pressable>
-            {/* <Button onPress={play} title="Play" disabled={!audioFile}/> */}
-        </View>
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <Pressable style={[styles.dot, styles.center]}>
+        {recording &&
+          [...Array(3).keys()].map(index => {
+            return (
+              <MotiView
+                from={{opacity: 0.7, scale: 1}}
+                animate={{opacity: 0, scale: 4}}
+                transition={{
+                  type: 'timing',
+                  duration: 2000,
+                  easing: Easing.out(Easing.ease),
+                  delay: index * 400,
+                  repeatReverse: false,
+                  loop: true,
+                }}
+                key={index}
+                style={[StyleSheet.absoluteFillObject, styles.dot]}
+              />
+            );
+          })}
+        <Icon
+          name="microphone"
+          size={32}
+          color="#fff"
+          onPress={animationHandler}
+        />
+      </Pressable>
+      {/* <Button onPress={play} title="Play" disabled={!audioFile}/> */}
+    </View>
   );
-
-}
+};
 
 export default NewConversationTab;
 
 const styles = StyleSheet.create({
-  dot:{
-      width: 100,
-      height:100,
-      borderRadius:100,
-      backgroundColor: '#6E01EF'
+  dot: {
+    width: 100,
+    height: 100,
+    borderRadius: 100,
+    backgroundColor: '#6E01EF',
   },
   center: {
-      alignItems:'center',
-      justifyContent:'center',
-  }
-})
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

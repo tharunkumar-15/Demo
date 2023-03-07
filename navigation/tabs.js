@@ -10,29 +10,6 @@ import { StyleSheet,Text,View,Image,TouchableOpacity} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
-// const CustomTabBarButton = ({children, onPress}) => (
-//     <TouchableOpacity
-//     style={{
-//         top:-15,
-//         justifyContent:'center',
-//         alignItems:'center',
-//         ...styles.shadow
-//     }}
-//     onPress={onPress}
-//     >
-//         <View style={{
-//             width: 70,
-//             height: 70,
-//             borderRadius: 35,
-//             //backgroundColor:'#9F8BCC',
-//             backgroundColor:'#ffffff',
-//             opacity:9,
-//         }}>
-//             {children}
-//         </View>
-//     </TouchableOpacity>
-// );
-
 const Tabs =() => {
     return(
         <Tab.Navigator screenOptions={{tabBarShowLabel:false, 
@@ -95,26 +72,6 @@ const Tabs =() => {
                     </View>
                 ),
             }}/>
-
-            {/* <Tab.Screen name="Camera" component={CameraTab} 
-                options={{
-                    tabBarIcon: ({focused}) => (
-                        <Image
-                            source={require('./camera.png')}
-                            resizeMode="contain"
-                            style={{
-                                width:30,
-                                height:30,
-                                tintColor:'#041f60',
-                                
-                            }}
-                            />
-                    ),
-                    tabBarButton: (props) => (
-                        <CustomTabBarButton {...props} />
-                    )
-                }}
-            /> */}
 
             <Tab.Screen name="Add People" component={AddPeopleTab} options={{
                 tabBarIcon:({focused}) => (

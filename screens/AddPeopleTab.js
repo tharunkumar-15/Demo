@@ -6,11 +6,10 @@ import { Easing } from 'react-native-reanimated';
 
 
 function AddPeopleTab(){
-  const [inital, final] =useState(100);
     return(
       // <Pressable style={{flex:1, alignItems:'center', justifyContent:'center'}}>
         <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
-            <Pressable style={[styles.dot, styles.center]} onPress={()=>console.log('Clicked')}>
+            <Pressable style={[styles.dot, styles.center]} onPress={()=>console.log('Clicked')} >
               {[...Array(3).keys()].map((index) =>{
                 return(
                   <MotiView
@@ -23,7 +22,7 @@ function AddPeopleTab(){
                       delay: index * 400,
                       repeatReverse: false,
                       loop: true,
-                    }}
+                    } }
                   key={index}
                   style={[StyleSheet.absoluteFillObject, styles.dot]}
                   />

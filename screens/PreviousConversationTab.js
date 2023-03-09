@@ -24,7 +24,6 @@ LogBox.ignoreAllLogs();
 
 
 function PreviousConverstionTab() {
-  const [icon, seticon] = useState(false);
   const [modalStates, setModalStates] = useState([]);
   const [data, setdata] = useState([]);
   const {user} = useSelector(state => state.useReducer);
@@ -39,7 +38,7 @@ function PreviousConverstionTab() {
 
   useEffect(() => {
     ReadData();
-  }, []);
+  }, [data]);
 
   // useEffect(()=>{
   //     // imporconv();

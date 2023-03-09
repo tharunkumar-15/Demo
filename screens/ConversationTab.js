@@ -19,7 +19,7 @@ function ConversationTab({navigation}) {
   const[data,setdata]=useState([])
   useEffect(() => {
     ReadData();
-  }, []);
+  }, [data]);
 
   // const ReadData =  () => {
   //   try {

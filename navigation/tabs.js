@@ -12,9 +12,8 @@ const Tab = createBottomTabNavigator();
 
 const Tabs =() => {
     return(
-        <Tab.Navigator screenOptions={{tabBarShowLabel:false, 
+        <Tab.Navigator  screenOptions={{tabBarHideOnKeyboard: true,tabBarShowLabel:false, 
             tabBarStyle:{
-            elevation:0,
             backgroundColor:'#51087E',
             height:60,
              },
@@ -120,7 +119,6 @@ const styles = StyleSheet.create({
         },
         shadowOpacity:0.25,
         shadowRadius:3.5,
-        elevation:5
     }
 });
 

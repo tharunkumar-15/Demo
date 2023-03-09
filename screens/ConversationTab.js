@@ -49,10 +49,19 @@ function ConversationTab({navigation}) {
   };
   return (
     <View style={styles.usercontainer}>
+      <Image
+        source={require('./Conventia.png')}
+        resizeMode="contain"
+        style={{
+          width: 170,
+          height: 60,
+          marginLeft:10
+        }}
+      />
       <ScrollView
         contentContainerStyle={{alignItems: 'center'}}
         showsVerticalScrollIndicator={false}>
-        <Text style={styles.welcometext}>Conversation Tab</Text>
+        {/* <Text style={styles.welcometext}>Conversation Tab</Text> */}
         <Text>{data.Name}</Text>
         {data.map((cards, index) => (
           <View style={styles.carddesign} key={index}>

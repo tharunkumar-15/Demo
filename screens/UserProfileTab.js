@@ -1,19 +1,27 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Image, Modal} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Modal,
+  TouchableOpacity,
+} from 'react-native';
 import CustomButton from '../CustomButton';
 import {signOut} from 'firebase/auth';
-import {auth} from '../config';
+import {auth, db, storage} from '../config';
 import {doc, getDoc, updateDoc} from 'firebase/firestore';
 // import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
 import {setUser} from '../Redux/Actions';
-import {db} from '../config';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
+import Entypo from 'react-native-vector-icons/Entypo';
+import ImagePicker from 'react-native-image-crop-picker';
 import CustomInput from '../CustomInput';
+import {ref, getDownloadURL, uploadBytesResumable} from 'firebase/storage';
 
 function UserProfileTab({navigation}) {
   const [userdata, setUserdata] = useState([]);
@@ -23,12 +31,53 @@ function UserProfileTab({navigation}) {
     Address: '',
     Caregiverno: '',
   });
+  const [imagePath, setImagePath] = useState('');
   const {user} = useSelector(state => state.useReducer);
   const dispatch = useDispatch();
 
   useEffect(() => {
     Userdata();
-  }, []);
+  }, [userdata]);
+
+  const uploadimage = async () => {
+    console.log('upload function called');
+    const blobImage = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function () {
+        reject(new TypeError('Newtork error failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', imagePath, true);
+      xhr.send(null);
+    });
+
+    const metadata = {
+      contentType: 'image/jpeg',
+    };
+
+    const storageRef = ref(storage, 'Userimage/' + Date.now());
+    const snapshot = await uploadBytesResumable(
+      storageRef,
+      blobImage,
+      metadata,
+    );
+    const downloadURL = await getDownloadURL(snapshot.ref);
+    const Imageref = doc(db, 'Users', user);
+    await updateDoc(Imageref, {
+      UserImage: downloadURL,
+    });
+    console.log('downloadURL', downloadURL);
+  };
+
+  useEffect(() => {
+    if (imagePath !== '') {
+      uploadimage();
+      setImagePath('');
+    }
+  }, [imagePath]);
 
   const Userdata = async () => {
     try {
@@ -39,6 +88,22 @@ function UserProfileTab({navigation}) {
       console.log(error);
     }
   };
+
+  function takePhoto() {
+    console.log('captured');
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+    })
+      .then(image => {
+        console.log(image.path);
+        setImagePath(image.path);
+      })
+      .catch(error => {
+        console.log('Error taking photo:', error);
+      });
+  }
 
   const modalHandler = () => {
     setModal(prevstate => !prevstate);
@@ -54,32 +119,47 @@ function UserProfileTab({navigation}) {
       Userdata();
     });
   };
-  
+
   const logout = () => {
     try {
       signOut(auth).then(() => {
-        AsyncStorage.removeItem('UserData');
-        dispatch(setUser(''));
-        navigation.navigate('userloginpage');
+        AsyncStorage.removeItem('UserData').then(() => {
+          dispatch(setUser(''));
+          navigation.navigate('userloginpage');
+        });
       });
     } catch (error) {
-      alert(error);
+      console.log(error);
     }
   };
   return (
     <View style={styles.usercontainer}>
       <View style={styles.userdetails}>
-        <View>
-          <Text style={styles.datacontainer}>Name:{userdata.Name}</Text>
-          {userdata.Address && (
-            <Text style={styles.datacontainer}>Address:{userdata.Address}</Text>
-          )}
-          {userdata.Caregiverno && (
-            <Text style={styles.datacontainer}>
-              Care-Giver No:{userdata.Caregiverno}
-            </Text>
-          )}
-        </View>
+        {userdata.UserImage !== '' ? (
+          userdata.UserImage && (
+            <Image
+              source={{uri: userdata.UserImage}}
+              style={styles.userimage}
+            />
+          )
+        ) : (
+          <TouchableOpacity onPress={() => takePhoto()}>
+            <Image
+              source={require('../Userimageicon.png')}
+              style={styles.userimage}
+            />
+          </TouchableOpacity>
+        )}
+
+        <Text style={styles.datacontainer}>Name: {userdata.Name}</Text>
+        {userdata.Address && (
+          <Text style={styles.datacontainer}>Address: {userdata.Address}</Text>
+        )}
+        {userdata.Caregiverno && (
+          <Text style={styles.datacontainer}>
+            Care-Giver No: {userdata.Caregiverno}
+          </Text>
+        )}
       </View>
       <View style={styles.buttonstyle}>
         <CustomButton buttonTitle="Sign Out" onPress={() => logout()} />
@@ -94,6 +174,13 @@ function UserProfileTab({navigation}) {
           transparent={true}>
           <View style={styles.modalstyle}>
             <View style={styles.modalbackground}>
+              <Entypo
+                size={35}
+                color={'black'}
+                name="cross"
+                onPress={()=>modalHandler()}
+                style={styles.cross}
+              />
               <CustomInput
                 placeholderText="Name"
                 autoCapitalize="none"
@@ -137,23 +224,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-  },
-  welcometext: {
-    fontSize: 25,
-    color: 'black',
+    paddingTop: 50,
   },
   userdetails: {
     flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   datacontainer: {
     textAlign: 'center',
     color: 'black',
     fontSize: 19,
     margin: 7,
+    fontWeight: 'bold',
     marginTop: 25,
   },
   buttonstyle: {
-    flex: 1,
+    flex: 1.5,
     width: '90%',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -174,5 +261,18 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 30,
     paddingBottom: 30,
+  },
+  userimage: {
+    width: 150,
+    height: 150,
+    borderRadius: 80,
+    marginBottom: 20,
+    backgroundColor: '#F8F6F3',
+  },
+  cross: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    paddingBottom: 10,
   },
 });

@@ -10,13 +10,14 @@ import {
   getDocs,
   deleteDoc,
   updateDoc,
+  onSnapshot
 } from 'firebase/firestore';
 import {useSelector} from 'react-redux';
 import {format} from 'date-fns';
 
 function PreviousConverstionTab() {
   const [modalStates, setModalStates] = useState([]);
-  const [data, setdata] = useState([]);
+  const [data, setData] = useState([]);
   const {user} = useSelector(state => state.useReducer);
 
   const modalHandler = index => {
@@ -28,35 +29,48 @@ function PreviousConverstionTab() {
   };
 
   useEffect(() => {
-    ReadData();
-  }, [data]);
-
-  // useEffect(()=>{
-  //     // imporconv();
-  // },[icon])
-
-  const ReadData = async () => {
-    try {
-      const conversationsRef = collection(
-        db,
-        'Users',
-        user,
-        'Relatives',
-        'uZ6QtIFk1dOCYMhgGKYz',
-        'RecordedConversation',
-      );
-      const conversationsSnap = await getDocs(conversationsRef);
-      const conversationsData = conversationsSnap.docs.map(conversationDoc => ({
+    const conversationsRef = collection(
+      db,
+      'Users',
+      user,
+      'Relatives',
+      'uUvRiipoUTGqRSD6UAUF',
+      'RecordedConversation',
+    );
+    const unsubscribe = onSnapshot(conversationsRef, snapshot => {
+      const conversationsData = snapshot.docs.map(conversationDoc => ({
         ...conversationDoc.data(),
         id: conversationDoc.id,
       }));
-      setdata(conversationsData);
+      setData(conversationsData);
       setModalStates(new Array(conversationsData.length).fill(false));
-    } catch (error) {
-      console.log('Tharun', error);
-    }
-  };
-
+    });
+    return () => unsubscribe();
+  }, []);
+  
+  
+    const ReadData = async () => {
+      try {
+        const conversationsRef = collection(
+          db,
+          'Users',
+          user,
+          'Relatives',
+          'uUvRiipoUTGqRSD6UAUF',
+          'RecordedConversation',
+        );
+        const conversationsSnap = await getDocs(conversationsRef);
+        const conversationsData = conversationsSnap.docs.map(conversationDoc => ({
+          ...conversationDoc.data(),
+          id: conversationDoc.id,
+        }));
+        setData(conversationsData);
+        setModalStates(new Array(conversationsData.length).fill(false));
+      } catch (error) {
+        console.log('Tharun', error);
+      }
+    };
+  
   const deleterelative = async docid => {
     try {
       const conversationRef = doc(
@@ -64,13 +78,13 @@ function PreviousConverstionTab() {
         'Users',
         user,
         'Relatives',
-        'uZ6QtIFk1dOCYMhgGKYz',
+        'uUvRiipoUTGqRSD6UAUF',
         'RecordedConversation',
         docid,
       );
       await deleteDoc(conversationRef).then(() => {
         alert('Deleted Data Successfully');
-        setdata(prevData => prevData.filter(item => item.id !== docid));
+        setData(prevData => prevData.filter(item => item.id !== docid));
       });
     } catch (error) {
       console.log(error);
@@ -84,27 +98,26 @@ function PreviousConverstionTab() {
         'Users',
         user,
         'Relatives',
-        'uZ6QtIFk1dOCYMhgGKYz',
+        'uUvRiipoUTGqRSD6UAUF',
         'RecordedConversation',
         docid,
       );
       await updateDoc(Imporconv, {
         Important: !currentImportantState,
       });
-      setdata(prevData =>
-        prevData.map(info => {
-          if (info.id === docid) {
-            return {...info, Important: !currentImportantState};
-          } else {
-            return info;
-          }
-        }),
-      );
+      setData(prevData => {
+        const updatedIndex = prevData.findIndex(item => item.id === docid);
+        const updatedItem = {...prevData[updatedIndex], Important: !currentImportantState};
+        const newData = [...prevData];
+        newData[updatedIndex] = updatedItem;
+        return newData;
+      });
     } catch (error) {
       console.log('Suhas:', error);
     }
   };
 
+  
   return (
     <View style={styles.usercontainer}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -244,6 +257,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 10,
     margin: 5,
+    marginRight:10,
   },
   remaininfo: {
     color: 'white',

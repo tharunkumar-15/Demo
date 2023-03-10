@@ -113,7 +113,7 @@ function LoginPage({navigation}) {
     <View style={styles.loginmainpage}>
       {isloaded ? (
         <View>
-          <ActivityIndicator size="large" color="#ffffff" />
+          <ActivityIndicator size="large" color="black" />
         </View>
       ) : (
         <ScrollView
@@ -159,7 +159,7 @@ function LoginPage({navigation}) {
             Forgot Password?
           </Text>
           <Pressable>
-            <Text style={styles.googlebutton}>Sign in with Google</Text>
+            {/* <Text style={styles.googlebutton}>Sign in with Google</Text> */}
           </Pressable>
           <Text
             style={styles.register}
@@ -179,14 +179,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#51087E',
+    backgroundColor: '#F8F6F3',
     paddingTop: 40,
   },
   appname: {
     fontWeight: 'bold',
     fontSize: 35,
     marginBottom: 20,
-    color: 'white',
+    color: 'black',
   },
   logincontainer: {
     width: '100%',
@@ -202,20 +202,22 @@ const styles = StyleSheet.create({
   loginpagetext: {
     fontWeight: 'bold',
     fontSize: 27,
-    color: 'white',
+    color: 'black',
     marginBottom: 15,
     textAlign: 'center',
   },
   register: {
-    color: 'white',
-    fontSize: 17,
+    color: 'black',
+    fontSize: 19,
     margin: 15,
+    textDecorationLine: 'underline'
   },
   forgotpassword: {
-    fontSize: 15,
-    color: 'white',
+    fontSize: 17,
+    color: 'black',
     marginTop: 5,
     marginBottom: 5,
+    textDecorationLine: 'underline'
   },
   googlebutton: {
     color: 'red',

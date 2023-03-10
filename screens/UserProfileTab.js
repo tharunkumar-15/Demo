@@ -151,7 +151,7 @@ function UserProfileTab({navigation}) {
           </TouchableOpacity>
         )}
 
-        <Text style={styles.datacontainer}>Name: {userdata.Name}</Text>
+        {userdata.Name &&<Text style={styles.datacontainer}>Name: {userdata.Name}</Text>}
         {userdata.Address && (
           <Text style={styles.datacontainer}>Address: {userdata.Address}</Text>
         )}

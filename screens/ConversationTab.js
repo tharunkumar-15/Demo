@@ -68,7 +68,7 @@ function ConversationTab({navigation}) {
                   width: '80%',
                   backgroundColor:"#f95999"
                 }}
-                // onPress={() => navigation.navigate('UserProfileTab')}
+                onPress={() => navigation.navigate('Camera',{screen:'PreviousConverstionTab'})}
               />
             </View>
           </View>

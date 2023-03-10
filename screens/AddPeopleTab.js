@@ -1,6 +1,6 @@
 import {Image} from '@motify/components';
 import React from 'react';
-import {View, Text, StyleSheet, Pressable, TextInput} from 'react-native';
+import {View, Text, StyleSheet, Pressable, TextInput, KeyboardAvoidingView} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomButton from '../CustomButton';
@@ -8,7 +8,7 @@ import CustomButton from '../CustomButton';
 function AddPeopleTab() {
   return (
     <View style={styles.usercontainer}>
-      <Image
+      {/* <Image
         source={require('./Conventia.png')}
         resizeMode="contain"
         style={{
@@ -16,7 +16,7 @@ function AddPeopleTab() {
           height: 60,
           marginLeft:10
         }}
-      />
+      /> */}
       <ScrollView styles={styles.usercontainer}>
         <View style={styles.imagecomponent}>
           <Image
@@ -87,8 +87,6 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   inputtextstyle: {
-    textShadowColor: '#585858',
-    borderWidth: 1,
     margin: 10,
     padding: 20,
     borderRadius: 10,

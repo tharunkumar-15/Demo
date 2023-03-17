@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Image,
   ScrollView,
-  Pressable,
 } from 'react-native';
 import CustomButton from '../CustomButton';
 import {db} from '../config';
@@ -21,19 +20,6 @@ function ConversationTab({navigation}) {
     ReadData();
   }, [data]);
 
-  // const ReadData =  () => {
-  //   try {
-  //     const docRef = doc(db, "Users",user);
-  //     const docSnap=getDoc(docRef).then((doc)=>{
-  //       console.log(doc.data(),doc.id);
-  //       setdata(doc.data())
-  //     })
-  //     // console.log(docSnap)
-      
-  //   } catch (error){ 
-  //     console.log("Tharun",error);
-  //   }
-  // };
   const ReadData = async () => {
     try {
         const relativesRef = collection(db, 'Users', user, 'Relatives');

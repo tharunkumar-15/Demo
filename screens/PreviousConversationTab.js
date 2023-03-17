@@ -12,9 +12,18 @@ import {
   updateDoc,
   onSnapshot
 } from 'firebase/firestore';
+import {LogBox} from 'react-native';
 import {useSelector} from 'react-redux';
 import {format} from 'date-fns';
 import CustomCard from './CustomCard';
+
+
+// Ignore log notification by message:
+LogBox.ignoreLogs(['Warning: ...']);
+
+// Ignore all log notifications:
+LogBox.ignoreAllLogs();
+
 
 function PreviousConverstionTab() {
   const [modalStates, setModalStates] = useState([]);

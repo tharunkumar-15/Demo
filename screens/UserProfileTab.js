@@ -31,6 +31,7 @@ function UserProfileTab({navigation}) {
     Address: '',
     Caregiverno: '',
   });
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
   const [imagePath, setImagePath] = useState('');
   const {user} = useSelector(state => state.useReducer);
   const dispatch = useDispatch();
@@ -64,20 +65,26 @@ function UserProfileTab({navigation}) {
       blobImage,
       metadata,
     );
+    
     const downloadURL = await getDownloadURL(snapshot.ref);
     const Imageref = doc(db, 'Users', user);
-    await updateDoc(Imageref, {
+
+    const storageStatus=await updateDoc(Imageref, {
       UserImage: downloadURL,
     });
     console.log('downloadURL', downloadURL);
+
+    setIsImageUploaded(true); // <-- Set state variable to true after image upload
   };
 
   useEffect(() => {
-    if (imagePath !== '') {
+    if (imagePath !== '' && !isImageUploaded) { // <-- Add check for isImageUploaded
       uploadimage();
       setImagePath('');
+    } else if (isImageUploaded) { // <-- Reset state variable to false after image upload
+      setIsImageUploaded(false);
     }
-  }, [imagePath]);
+  }, [imagePath, isImageUploaded]);
 
   const Userdata = async () => {
     try {
@@ -137,10 +144,12 @@ function UserProfileTab({navigation}) {
       <View style={styles.userdetails}>
         {userdata.UserImage !== '' ? (
           userdata.UserImage && (
+            <TouchableOpacity onPress={() => takePhoto()}>
             <Image
               source={{uri: userdata.UserImage}}
               style={styles.userimage}
             />
+            </TouchableOpacity>
           )
         ) : (
           <TouchableOpacity onPress={() => takePhoto()}>

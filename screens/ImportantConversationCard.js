@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View} from 'react-native'
 import React from 'react'
 import CustomButton from '../CustomButton'
 import { useNavigation } from '@react-navigation/native';
-export default function ImportantConversationCards() {
+export default function ImportantConversationCard() {
     const navigation = useNavigation();
   return (
        <View style={styles.cards}>

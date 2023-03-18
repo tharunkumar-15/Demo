@@ -15,6 +15,7 @@ import {
 import {LogBox} from 'react-native';
 import {useSelector} from 'react-redux';
 import {format} from 'date-fns';
+import CustomCard from './CustomCard';
 
 
 // Ignore log notification by message:
@@ -29,15 +30,19 @@ function PreviousConverstionTab() {
   const [data, setData] = useState([]);
   const {user} = useSelector(state => state.useReducer);
 
-  const modalHandler = index => {
-    setModalStates(prevStates => {
-      const newStates = [...prevStates];
-      newStates[index] = !newStates[index];
-      return newStates;
-    });
-  };
+  // const modalHandler = index => {
+  //   setModalStates(prevStates => {
+  //     const newStates = [...prevStates];
+  //     newStates[index] = !newStates[index];
+  //     return newStates;
+  //   });
+  // };
 
   useEffect(() => {
+    ReadData();
+  }, []);
+  
+  const ReadData=()=>{
     const conversationsRef = collection(
       db,
       'Users',
@@ -54,77 +59,74 @@ function PreviousConverstionTab() {
       setData(conversationsData);
       setModalStates(new Array(conversationsData.length).fill(false));
     });
-    return () => unsubscribe();
-  }, []);
+  }
+  //   const ReadData = async () => {
+  //     try {
+  //       const conversationsRef = collection(
+  //         db,
+  //         'Users',
+  //         user,
+  //         'Relatives',
+  //         'uUvRiipoUTGqRSD6UAUF',
+  //         'RecordedConversation',
+  //       );
+  //       const conversationsSnap = await getDocs(conversationsRef);
+  //       const conversationsData = conversationsSnap.docs.map(conversationDoc => ({
+  //         ...conversationDoc.data(),
+  //         id: conversationDoc.id,
+  //       }));
+  //       setData(conversationsData);
+  //       setModalStates(new Array(conversationsData.length).fill(false));
+  //     } catch (error) {
+  //       console.log('Tharun', error);
+  //     }
+  //   };
   
-  
-    const ReadData = async () => {
-      try {
-        const conversationsRef = collection(
-          db,
-          'Users',
-          user,
-          'Relatives',
-          'uUvRiipoUTGqRSD6UAUF',
-          'RecordedConversation',
-        );
-        const conversationsSnap = await getDocs(conversationsRef);
-        const conversationsData = conversationsSnap.docs.map(conversationDoc => ({
-          ...conversationDoc.data(),
-          id: conversationDoc.id,
-        }));
-        setData(conversationsData);
-        setModalStates(new Array(conversationsData.length).fill(false));
-      } catch (error) {
-        console.log('Tharun', error);
-      }
-    };
-  
-  const deleterelative = async docid => {
-    try {
-      const conversationRef = doc(
-        db,
-        'Users',
-        user,
-        'Relatives',
-        'uUvRiipoUTGqRSD6UAUF',
-        'RecordedConversation',
-        docid,
-      );
-      await deleteDoc(conversationRef).then(() => {
-        alert('Deleted Data Successfully');
-        setData(prevData => prevData.filter(item => item.id !== docid));
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const deleterelative = async docid => {
+  //   try {
+  //     const conversationRef = doc(
+  //       db,
+  //       'Users',
+  //       user,
+  //       'Relatives',
+  //       'uUvRiipoUTGqRSD6UAUF',
+  //       'RecordedConversation',
+  //       docid,
+  //     );
+  //     await deleteDoc(conversationRef).then(() => {
+  //       alert('Deleted Data Successfully');
+  //       setData(prevData => prevData.filter(item => item.id !== docid));
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const imporconv = async (docid, currentImportantState) => {
-    try {
-      const Imporconv = doc(
-        db,
-        'Users',
-        user,
-        'Relatives',
-        'uUvRiipoUTGqRSD6UAUF',
-        'RecordedConversation',
-        docid,
-      );
-      await updateDoc(Imporconv, {
-        Important: !currentImportantState,
-      });
-      setData(prevData => {
-        const updatedIndex = prevData.findIndex(item => item.id === docid);
-        const updatedItem = {...prevData[updatedIndex], Important: !currentImportantState};
-        const newData = [...prevData];
-        newData[updatedIndex] = updatedItem;
-        return newData;
-      });
-    } catch (error) {
-      console.log('Suhas:', error);
-    }
-  };
+  // const imporconv = async (docid, currentImportantState) => {
+  //   try {
+  //     const Imporconv = doc(
+  //       db,
+  //       'Users',
+  //       user,
+  //       'Relatives',
+  //       'uUvRiipoUTGqRSD6UAUF',
+  //       'RecordedConversation',
+  //       docid,
+  //     );
+  //     await updateDoc(Imporconv, {
+  //       Important: !currentImportantState,
+  //     });
+  //     setData(prevData => {
+  //       const updatedIndex = prevData.findIndex(item => item.id === docid);
+  //       const updatedItem = {...prevData[updatedIndex], Important: !currentImportantState};
+  //       const newData = [...prevData];
+  //       newData[updatedIndex] = updatedItem;
+  //       return newData;
+  //     });
+  //   } catch (error) {
+  //     console.log('Suhas:', error);
+  //   }
+  // };
 
   
   return (
@@ -153,59 +155,9 @@ function PreviousConverstionTab() {
         </View>
         <Text style={styles.details}>Recordings</Text>
         <View style={styles.recordingdetails}>
-          {data.map((info, index) => (
-            <View key={index} style={styles.cards}>
-              <Text style={styles.remaininfo} numberOfLines={2}>
-                {info.SummaryDate?.seconds && (
-                  <Text style={styles.remaininfo} numberOfLines={2}>
-                    {format(
-                      new Date(info.SummaryDate.seconds * 1000),
-                      'MMM d, yyyy h:mm a',
-                    )}
-                    : {info.Summary}
-                  </Text>
-                )}
-              </Text>
-              <View style={styles.logostyle}>
-                <AntDesign
-                  size={25}
-                  color={'white'}
-                  name="delete"
-                  style={{marginTop: 15}}
-                  onPress={() => deleterelative(info.id)}
-                />
-                <AntDesign
-                  size={25}
-                  color={'white'}
-                  name={info.Important ? 'star' : 'staro'}
-                  style={{marginTop: 15, marginLeft: 20}}
-                  onPress={() => imporconv(info.id, info.Important)}
-                />
-
-                <View style={styles.buttonstyles}>
-                  <CustomButton
-                    buttonTitle="More Info"
-                    buttonStyle={{
-                      width: '65%',
-                      backgroundColor: '#f95999',
-                    }}
-                    textstyle={{
-                      fontSize: 15,
-                    }}
-                    onPress={() => modalHandler(index)}
-                  />
-                </View>
-                <Modal
-                  visible={modalStates[index]}
-                  onRequestClose={() => modalHandler(index)}
-                  animationType="fade"
-                  transparent={true}>
-                  <ConversationModal
-                    conversation={info.Summary}
-                    modalhandler={() => modalHandler(index)}
-                  />
-                </Modal>
-              </View>
+          {data.map((info, index) =>(
+            <View key={index} style={styles.cardstyle}>
+            <CustomCard info={info} modalStates={modalStates} setModalStates={setModalStates}index={index} setData={setData}/>
             </View>
           ))}
         </View>
@@ -255,30 +207,12 @@ const styles = StyleSheet.create({
   },
   recordingdetails: {
     flex: 2,
-    marginTop: 15,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  cards: {
-    backgroundColor: '#51087E',
-    width: '90%',
-    padding: 18,
-    marginBottom: 20,
-    borderRadius: 10,
-    margin: 5,
-    marginRight:10,
-  },
-  remaininfo: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 15,
-  },
-  logostyle: {
-    flexDirection: 'row',
-  },
-  buttonstyles: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginLeft: 20,
-  },
+  cardstyle:{
+    width:'100%',
+    justifyContent:'center',
+    alignItems:'center',
+  }
 });

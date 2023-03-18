@@ -1,29 +1,16 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import { useSelector,useDispatch } from 'react-redux';
-import { setUser } from '../Redux/Actions';
+import {createStackNavigator} from '@react-navigation/stack';
+import ImportantTab from './ImportantTab';
+import HomeUserScreen from './HomeUserScreen';
 
 function UserPage() {
-  const { user} = useSelector(state => state.useReducer);
+  const Stack = createStackNavigator();
   return (
-    <View style={styles.usercontainer}>
-      <Text style={styles.welcometext}>Welcome To Home Tab</Text>
-      <Text style={{color:'black'}}>{user}</Text>
-    </View>
+    <Stack.Navigator screenOptions={{header: () => null}}>
+      <Stack.Screen name="HomeScreen" component={HomeUserScreen}/>
+      <Stack.Screen name="ImportantTab" component={ImportantTab} />
+    </Stack.Navigator>
   );
 }
 
 export default UserPage;
-
-const styles = StyleSheet.create({
-  usercontainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-  welcometext: {
-    fontSize: 25,
-    color: 'black',
-  },
-});

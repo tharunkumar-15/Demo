@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import CustomButton from '../CustomButton';
 import {db} from '../config';
-import {collection,getDocs} from 'firebase/firestore';
+import { collection, getDocs, onSnapshot } from 'firebase/firestore';
 // import { useNavigation } from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 
@@ -18,21 +18,20 @@ function ConversationTab({navigation}) {
   const[data,setdata]=useState([])
   useEffect(() => {
     ReadData();
-  }, [data]);
+  }, []);
 
-  const ReadData = async () => {
-    try {
-        const relativesRef = collection(db, 'Users', user, 'Relatives');
-        const relativesSnap = await getDocs(relativesRef);
-        const relativesData = relativesSnap.docs.map(relativeDoc => ({
-          ...relativeDoc.data(),
-          id:relativeDoc.id
-        }))
-        setdata(relativesData);
-    } catch (error) {
-      console.log(error);
-    }
+  const ReadData = () => {
+    const relativesRef = collection(db, 'Users', user, 'Relatives');
+  
+    onSnapshot(relativesRef, (querySnapshot) => {
+      const relativesData = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setdata(relativesData);
+    });
   };
+  
   return (
     <View style={styles.usercontainer}>
       <ScrollView

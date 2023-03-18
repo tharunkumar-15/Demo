@@ -10,7 +10,7 @@ import {
 import CustomButton from '../CustomButton';
 import {signOut} from 'firebase/auth';
 import {auth, db, storage} from '../config';
-import {doc, getDoc, updateDoc} from 'firebase/firestore';
+import {doc, getDoc, updateDoc,onSnapshot} from 'firebase/firestore';
 // import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
@@ -33,12 +33,13 @@ function UserProfileTab({navigation}) {
   });
   const [isImageUploaded, setIsImageUploaded] = useState(false);
   const [imagePath, setImagePath] = useState('');
+  const [inputValue, setInputValue] = useState('');
   const {user} = useSelector(state => state.useReducer);
   const dispatch = useDispatch();
 
   useEffect(() => {
     Userdata();
-  }, [userdata]);
+  }, []);
 
   const uploadimage = async () => {
     console.log('upload function called');
@@ -65,11 +66,11 @@ function UserProfileTab({navigation}) {
       blobImage,
       metadata,
     );
-    
+
     const downloadURL = await getDownloadURL(snapshot.ref);
     const Imageref = doc(db, 'Users', user);
 
-    const storageStatus=await updateDoc(Imageref, {
+    const storageStatus = await updateDoc(Imageref, {
       UserImage: downloadURL,
     });
     console.log('downloadURL', downloadURL);
@@ -78,10 +79,12 @@ function UserProfileTab({navigation}) {
   };
 
   useEffect(() => {
-    if (imagePath !== '' && !isImageUploaded) { // <-- Add check for isImageUploaded
+    if (imagePath !== '' && !isImageUploaded) {
+      // <-- Add check for isImageUploaded
       uploadimage();
       setImagePath('');
-    } else if (isImageUploaded) { // <-- Reset state variable to false after image upload
+    } else if (isImageUploaded) {
+      // <-- Reset state variable to false after image upload
       setIsImageUploaded(false);
     }
   }, [imagePath, isImageUploaded]);
@@ -89,12 +92,14 @@ function UserProfileTab({navigation}) {
   const Userdata = async () => {
     try {
       const UserRef = doc(db, 'Users', user);
-      const UserSnap = await getDoc(UserRef);
-      setUserdata(UserSnap.data());
+      onSnapshot(UserRef, (doc) => {
+        setUserdata(doc.data());
+      });
     } catch (error) {
       console.log(error);
     }
   };
+  
 
   function takePhoto() {
     console.log('captured');
@@ -115,6 +120,7 @@ function UserProfileTab({navigation}) {
   const modalHandler = () => {
     setModal(prevstate => !prevstate);
   };
+
   const submitbutton = async () => {
     const UserRef = doc(db, 'Users', user);
     await updateDoc(UserRef, {
@@ -123,7 +129,7 @@ function UserProfileTab({navigation}) {
       Caregiverno: update.Caregiverno,
     }).then(() => {
       setModal(!modal);
-      Userdata();
+      setInputValue('');
     });
   };
 
@@ -145,10 +151,10 @@ function UserProfileTab({navigation}) {
         {userdata.UserImage !== '' ? (
           userdata.UserImage && (
             <TouchableOpacity onPress={() => takePhoto()}>
-            <Image
-              source={{uri: userdata.UserImage}}
-              style={styles.userimage}
-            />
+              <Image
+                source={{uri: userdata.UserImage}}
+                style={styles.userimage}
+              />
             </TouchableOpacity>
           )
         ) : (
@@ -160,7 +166,9 @@ function UserProfileTab({navigation}) {
           </TouchableOpacity>
         )}
 
-        {userdata.Name &&<Text style={styles.datacontainer}>Name: {userdata.Name}</Text>}
+        {userdata.Name && (
+          <Text style={styles.datacontainer}>Name: {userdata.Name}</Text>
+        )}
         {userdata.Address && (
           <Text style={styles.datacontainer}>Address: {userdata.Address}</Text>
         )}
@@ -187,7 +195,7 @@ function UserProfileTab({navigation}) {
                 size={35}
                 color={'black'}
                 name="cross"
-                onPress={()=>modalHandler()}
+                onPress={() => modalHandler()}
                 style={styles.cross}
               />
               <CustomInput
@@ -197,6 +205,7 @@ function UserProfileTab({navigation}) {
                 onChangeText={text => setUpdate({...update, Name: text})}
                 Icon={Ionicons}
                 Icontype="person-outline"
+                value={inputValue}
               />
               <CustomInput
                 placeholderText="Address"
@@ -205,6 +214,7 @@ function UserProfileTab({navigation}) {
                 onChangeText={text => setUpdate({...update, Address: text})}
                 Icon={FontAwesome}
                 Icontype="address-card-o"
+                value={inputValue}
               />
               <CustomInput
                 placeholderText="Card-Giver Number"
@@ -213,6 +223,7 @@ function UserProfileTab({navigation}) {
                 onChangeText={text => setUpdate({...update, Caregiverno: text})}
                 Icon={Feather}
                 Icontype="phone"
+                value={inputValue}
               />
               <CustomButton
                 buttonTitle="Submit"

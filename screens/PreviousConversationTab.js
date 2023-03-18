@@ -39,6 +39,10 @@ function PreviousConverstionTab() {
   // };
 
   useEffect(() => {
+    ReadData();
+  }, []);
+  
+  const ReadData=()=>{
     const conversationsRef = collection(
       db,
       'Users',
@@ -55,10 +59,7 @@ function PreviousConverstionTab() {
       setData(conversationsData);
       setModalStates(new Array(conversationsData.length).fill(false));
     });
-    return () => unsubscribe();
-  }, []);
-  
-  
+  }
   //   const ReadData = async () => {
   //     try {
   //       const conversationsRef = collection(

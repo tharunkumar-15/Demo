@@ -54,7 +54,7 @@ function ConversationTab({navigation}) {
                   backgroundColor:"#f95999",
                   marginLeft:10,
                 }}
-                onPress={() => navigation.navigate('Camera',{screen:'PreviousConverstionTab'})}
+                // onPress={() => navigation.navigate('Camera',{screen:'PreviousConverstionTab'})}
               />
             </View>
           </View>

@@ -205,7 +205,6 @@ function UserProfileTab({navigation}) {
                 onChangeText={text => setUpdate({...update, Name: text})}
                 Icon={Ionicons}
                 Icontype="person-outline"
-                value={inputValue}
               />
               <CustomInput
                 placeholderText="Address"
@@ -214,7 +213,6 @@ function UserProfileTab({navigation}) {
                 onChangeText={text => setUpdate({...update, Address: text})}
                 Icon={FontAwesome}
                 Icontype="address-card-o"
-                value={inputValue}
               />
               <CustomInput
                 placeholderText="Card-Giver Number"
@@ -223,7 +221,6 @@ function UserProfileTab({navigation}) {
                 onChangeText={text => setUpdate({...update, Caregiverno: text})}
                 Icon={Feather}
                 Icontype="phone"
-                value={inputValue}
               />
               <CustomButton
                 buttonTitle="Submit"

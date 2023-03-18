@@ -16,30 +16,71 @@ export default function ImportantTab() {
 
   const keys=['Summary','SummaryDate']
 
+  // useEffect(() => {
+  //   const q = query(
+  //     collection(
+  //       db,
+  //       'Users',
+  //       user,
+  //       'Relatives',
+  //       'uUvRiipoUTGqRSD6UAUF',
+  //       'RecordedConversation',
+  //     ),
+  //     where('Important', '==', true)
+  //   );
+
+  //   const unsubscribe = onSnapshot(q, snapshot => {
+  //     const ImportantData = snapshot.docs.map(relativeDoc => ({
+  //       ...relativeDoc.data(),
+  //       id: relativeDoc.id,
+  //     }));
+  //     setData(ImportantData);
+  //     setModalStates(new Array(ImportantData.length).fill(false));
+  //   });
+
+  //   return () => unsubscribe();
+  // }, []);
+
+
   useEffect(() => {
-    const q = query(
-      collection(
-        db,
-        'Users',
-        user,
-        'Relatives',
-        'uUvRiipoUTGqRSD6UAUF',
-        'RecordedConversation',
-      ),
-      where('Important', '==', true)
-    );
-
-    const unsubscribe = onSnapshot(q, snapshot => {
-      const ImportantData = snapshot.docs.map(relativeDoc => ({
-        ...relativeDoc.data(),
-        id: relativeDoc.id,
-      }));
-      setData(ImportantData);
-      setModalStates(new Array(ImportantData.length).fill(false));
+    const relativesRef = collection(db, 'Users', user, 'Relatives');
+  
+    const unsubscribe = onSnapshot(relativesRef, (querySnapshot) => {
+      const relativesData = [];
+      
+      querySnapshot.forEach((doc) => {
+        const importRef = collection(
+          db,
+          'Users',
+          user,
+          'Relatives',
+          doc.id,
+          'RecordedConversation'
+        );
+        const importQuery = query(importRef, where('Important', '==', true));
+  
+        onSnapshot(importQuery, (importSnapshot) => {
+          const importData = importSnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          const relativeData = {
+            id: doc.id,
+            ...doc.data(),
+            RecordedConversation: importData,
+          };
+          relativesData.push(relativeData);
+          setModalStates(new Array(relativesData.length).fill(false));
+          setData(relativesData);
+        });
+      });
     });
-
-    return () => unsubscribe();
-  }, [ ]);
+  
+    return unsubscribe;
+  }, [user]);
+  
+  
+  
 
   return (
     <View style={styles.Cardcontainer}>
@@ -71,21 +112,21 @@ export default function ImportantTab() {
         </View>
         {data &&
   data
-    .filter((info) =>
-      keys.some(
-        (key) =>{
-          const filterKey=key==='SummaryDate'?format(
-            new Date(info.SummaryDate.seconds * 1000),
-            'MMM d, yyyy h:mm a',
-          ):info[key]
-        return(
-          filterKey &&
-          typeof filterKey === 'string' &&
-          filterKey.toLowerCase().includes(searchQuery.toLowerCase())
-         )
-        }
-      )
-    )
+    // .filter((info) =>
+    //   keys.some(
+    //     (key) =>{
+    //       const filterKey=key==='SummaryDate'?format(
+    //         new Date(info.SummaryDate.seconds * 1000),
+    //         'MMM d, yyyy h:mm a',
+    //       ):info[key]
+    //     return(
+    //       filterKey &&
+    //       typeof filterKey === 'string' &&
+    //       filterKey.toLowerCase().includes(searchQuery.toLowerCase())
+    //      )
+    //     }
+    //   )
+    // )
     .map((info, index) => (
       <View key={index} style={styles.cardstyle}>
         <CustomCard
@@ -94,9 +135,11 @@ export default function ImportantTab() {
           setModalStates={setModalStates}
           index={index}
           setData={setData}
+          id={info.id} // pass the id of the card as a prop
         />
       </View>
     ))}
+
       </ScrollView>
     </View>
   );

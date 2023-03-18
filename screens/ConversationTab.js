@@ -51,7 +51,8 @@ function ConversationTab({navigation}) {
                 buttonTitle="More Info"
                 buttonStyle={{
                   width: '80%',
-                  backgroundColor:"#f95999"
+                  backgroundColor:"#f95999",
+                  marginLeft:10,
                 }}
                 onPress={() => navigation.navigate('Camera',{screen:'PreviousConverstionTab'})}
               />

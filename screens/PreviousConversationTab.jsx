@@ -25,7 +25,7 @@ LogBox.ignoreLogs(['Warning: ...']);
 LogBox.ignoreAllLogs();
 
 
-function PreviousConverstionTab() {
+function PreviousConverstionTab(props) {
   const [modalStates, setModalStates] = useState([]);
   const [data, setData] = useState([]);
   const {user} = useSelector(state => state.useReducer);
@@ -37,18 +37,22 @@ function PreviousConverstionTab() {
   //     return newStates;
   //   });
   // };
-
+  const { id, RelativeName, Relation, ImageUri } = props.route.params.cards;
   useEffect(() => {
-    const conversationsRef = collection(
+   ReadData();
+  }, [data]);
+
+  const ReadData=async()=>{
+    const conversationsRef =collection(
       db,
       'Users',
       user,
       'Relatives',
-      'uUvRiipoUTGqRSD6UAUF',
+       id,
       'RecordedConversation',
     );
-    const unsubscribe = onSnapshot(conversationsRef, snapshot => {
-      const conversationsData = snapshot.docs.map(conversationDoc => ({
+    const unsubscribe =onSnapshot(conversationsRef, snapshot => {
+      const conversationsData =snapshot.docs.map(conversationDoc => ({
         ...conversationDoc.data(),
         id: conversationDoc.id,
       }));
@@ -56,9 +60,8 @@ function PreviousConverstionTab() {
       setModalStates(new Array(conversationsData.length).fill(false));
     });
     return () => unsubscribe();
-  }, []);
-  
-  
+  }
+
   //   const ReadData = async () => {
   //     try {
   //       const conversationsRef = collection(
@@ -134,12 +137,12 @@ function PreviousConverstionTab() {
         <Text style={styles.welcometext}>Previous Converstions</Text>
         <View style={styles.relativedetails}>
           <Image
-            source={require('../Loginimage.jpg')}
+            source={{uri:ImageUri}}
             style={styles.relativeimage}
           />
           <View style={styles.rightdetails}>
-            <Text style={styles.details}>Name: Surya S</Text>
-            <Text style={styles.details}>Relation: Friend</Text>
+            <Text style={styles.details}>Name:{RelativeName}</Text>
+            <Text style={styles.details}>Relation: {Relation}</Text>
             <CustomButton
               buttonTitle="Remove Person"
               buttonStyle={{
@@ -156,7 +159,7 @@ function PreviousConverstionTab() {
         <View style={styles.recordingdetails}>
           {data.map((info, index) =>(
             <View key={index} style={styles.cardstyle}>
-            <CustomCard info={info} modalStates={modalStates} setModalStates={setModalStates}index={index} setData={setData}/>
+              <CustomCard info={info} modalStates={modalStates} setModalStates={setModalStates}index={index} setData={setData}/>
             </View>
           ))}
         </View>

@@ -15,6 +15,10 @@ export default function CustomCard({
   setModalStates,
   modalStates,
   setData,
+  relativeid,
+  relativeName,
+  relativeRelation,
+  setImportant
 }) {
   const [imp, setImp] = useState(info.Important);
   const {user} = useSelector(state => state.useReducer);
@@ -30,41 +34,37 @@ export default function CustomCard({
     setImp(info.Important);
   }, [info.Important]);
 
-  const imporconv = async (docid, currentImportantState) => {
-    setImp(!currentImportantState);
-    try {
-      const Imporconv = doc(
-        db,
-        'Users',
-        user,
-        'Relatives',
-        'uUvRiipoUTGqRSD6UAUF',
-        'RecordedConversation',
-        docid,
-      );
-
-      await updateDoc(Imporconv, {
-        Important: !currentImportantState,
-      }); // update the state of imp only for the card that was clicked
-    } catch (error) {
-      console.error(error);
-    }
+  const updateImportant = async id => {
+    setImp(!imp);
+    const docRef = doc(
+      db,
+      'Users',
+      user,
+      'Relatives',
+      relativeid,
+      'RecordedConversation',
+      id
+    );
+    await updateDoc(docRef, {
+      Important: !imp,
+    });
   };
 
-  const deleterelative = async docid => {
+  
+  const deleterelative = async (docid,docidrelative) => {
     try {
       const conversationRef = doc(
         db,
         'Users',
         user,
         'Relatives',
-        'uUvRiipoUTGqRSD6UAUF',
+         docidrelative,
         'RecordedConversation',
         docid,
       );
       await deleteDoc(conversationRef).then(() => {
         alert('Deleted Data Successfully');
-        setData(prevData => prevData.filter(item => item.id !== docid));
+        setImportant(prevData => prevData.filter(item => item.id !== docid));
       });
     } catch (error) {
       console.log(error);
@@ -84,21 +84,29 @@ export default function CustomCard({
           </Text>
         )}
       </Text>
+      <Text style={styles.remaininfo} numberOfLines={2}>
+        {relativeName}
+      </Text>
+      <Text style={styles.remaininfo} numberOfLines={2}>
+        {relativeRelation}
+      </Text>
       <View style={styles.logostyle}>
         <AntDesign
           size={25}
           color={'white'}
           name="delete"
           style={{marginTop: 15}}
-          onPress={() => deleterelative(info.id)}
+          onPress={() => deleterelative(info.id,relativeid)}
         />
-        <TouchableOpacity onPress={() => imporconv(info.id, imp)}>
-          <AntDesign
-            name={imp ? 'star' : 'staro'}
-            size={25}
-            color={imp ? '#FFD700' : 'black'}
-            style={styles.staricon}
-          />
+       <TouchableOpacity
+          onPress={() => updateImportant(info.id)}
+          activeOpacity={0.7}
+        >
+          {info.Important ? (
+            <AntDesign name="star" size={25} color="gold" style={styles.staricon}/>
+          ) : (
+            <AntDesign name="staro" size={20} color="white" style={styles.staricon}/>
+          )}
         </TouchableOpacity>
         <View style={styles.buttonstyles}>
           <CustomButton
@@ -154,5 +162,11 @@ const styles = StyleSheet.create({
   staricon:{
     marginLeft:18,
     marginTop:15,
+  },
+  relationinfo:{
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 20,
+    textAlign:'center'
   }
 });

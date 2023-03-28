@@ -105,7 +105,7 @@ function LoginPage({navigation}) {
       .catch(error => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorMessage)
+        alert(errorMessage)
       });
   };
 
@@ -120,9 +120,9 @@ function LoginPage({navigation}) {
           contentContainerStyle={{alignItems: 'center'}}
           showsVerticalScrollIndicator={false}>
           <View style={styles.appcontainer}>
-            <Text style={styles.appname}>Conventia</Text>
+            <Text style={styles.appname}>Nybula</Text>
             <Image
-              source={require('./Loginimage.jpg')}
+              source={require('./nybula.png')}
               style={styles.loginimage}
               resizeMode="stretch"
             />
@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
     fontSize: 35,
     marginBottom: 20,
     color: 'black',
+    textAlign:'center'
   },
   logincontainer: {
     width: '100%',

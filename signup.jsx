@@ -22,20 +22,17 @@ const windowHeight = Dimensions.get('window').height;
 function SignupPage({navigation}) {
   // const navigation = useNavigation();
   const [userdetail, setuserdetail] = useState({
-    email: '',
-    password: '',
-    name: '',
+    Email: '',
+    Name: '',
   });
 
   const signup = () => {
-    createUserWithEmailAndPassword(auth, userdetail.email, userdetail.password)
+    createUserWithEmailAndPassword(auth, userdetail.Email, userdetail.password)
       .then(userCredential => {
         setDoc(doc(db, 'Users', userCredential.user.uid), {
-          Email: userdetail.email,
-          Name: userdetail.name,
-          UserImage:'',
-          Address:'',
-          Caregiverno:'',
+          Email:userdetail.Email,
+          Availabitlity:false,
+          Name:userdetail.Name,
         });
         alert('User created successfully');
         navigation.navigate('userloginpage');
@@ -65,7 +62,7 @@ function SignupPage({navigation}) {
             autoCapitalize="none"
             autoCorrect={false}
             keyboardType="email-address"
-            onChangeText={text => setuserdetail({...userdetail, email: text})}
+            onChangeText={text => setuserdetail({...userdetail, Email: text})}
             Icon={Fontisto}
             Icontype={'email'}
           />
@@ -73,7 +70,7 @@ function SignupPage({navigation}) {
             placeholderText={'Name'}
             autoCapitalize="none"
             autoCorrect={false}
-            onChangeText={text => setuserdetail({...userdetail, name: text})}
+            onChangeText={text => setuserdetail({...userdetail, Name: text})}
             Icon={Ionicons}
             Icontype={'ios-person-outline'}
           />

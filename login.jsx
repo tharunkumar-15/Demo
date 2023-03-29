@@ -159,7 +159,6 @@ function LoginPage({navigation}) {
             Forgot Password?
           </Text>
           <Pressable>
-            {/* <Text style={styles.googlebutton}>Sign in with Google</Text> */}
           </Pressable>
           <Text
             style={styles.register}

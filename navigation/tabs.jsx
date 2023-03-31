@@ -3,7 +3,6 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import UserPage from '../screens/UserPage';
 import UserProfileTab from '../screens/UserProfileTab';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
-
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
@@ -28,7 +27,7 @@ const Tabs = () => {
             <View
               style={{alignItems: 'center', justifyContent: 'center', top: 5}}>
               <Image
-                source={require('./home.png')}
+                source={require('./AddUser.png')}
                 resizeMode="contain"
                 style={{
                   width: 25,
@@ -38,7 +37,7 @@ const Tabs = () => {
               />
               <Text
                 style={{color: focused ? '#ffffff' : '#9F8BCC', fontSize: 12}}>
-                Home
+                Appointment
               </Text>
             </View>
           ),
@@ -56,7 +55,6 @@ const Tabs = () => {
           },
         }}
       />
-
       <Tab.Screen
         name="User Profile"
         component={UserProfileTab}
@@ -75,7 +73,7 @@ const Tabs = () => {
               />
               <Text
                 style={{color: focused ? '#ffffff' : '#9F8BCC', fontSize: 12}}>
-                Account
+                Profile
               </Text>
             </View>
           ),

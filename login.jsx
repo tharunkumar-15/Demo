@@ -36,20 +36,6 @@ function LoginPage({navigation}) {
     getuid();
   }, []);
 
-  // const handleGoogleSignIn = async () => {
-  //   try {
-  //     await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true}); // <-- Add this
-  //     const {idToken} = await GoogleSignin.signIn().then(() =>
-  //       navigation.navigate('UserPage'),
-  //     );
-  //     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-  //     return auth().signInWithCredential(googleCredential);
-  //   } catch (error) {
-  //     // This will show you if GooglePlayServices is missing
-  //     console.log(error);
-  //   }
-  // };
-
   const getdata = () => {
     try {
       AsyncStorage.getItem('UserData').then(value => {

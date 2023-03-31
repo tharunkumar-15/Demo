@@ -16,7 +16,7 @@ import CustomButton from './CustomButton';
 import {doc, setDoc} from 'firebase/firestore';
 import {db} from './config';
 import CustomInput from './CustomInput';
-
+import { useSelector,useDispatch } from 'react-redux';
 const windowHeight = Dimensions.get('window').height;
 
 function SignupPage({navigation}) {
@@ -24,17 +24,20 @@ function SignupPage({navigation}) {
   const [userdetail, setuserdetail] = useState({
     Email: '',
     Name: '',
+    password:''
   });
-
+  const {user} = useSelector(state => state.useReducer);
+  const dispatch = useDispatch();
+  
   const signup = () => {
     createUserWithEmailAndPassword(auth, userdetail.Email, userdetail.password)
       .then(userCredential => {
         setDoc(doc(db, 'Users', userCredential.user.uid), {
           Email:userdetail.Email,
-          Availabitlity:false,
           Name:userdetail.Name,
+          UserImage:'',
+          Userid:user,
         });
-        alert('User created successfully');
         navigation.navigate('userloginpage');
       })
       .catch(error => {

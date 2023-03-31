@@ -34,7 +34,7 @@ function UserProfileTab({navigation}) {
   const [imagePath, setImagePath] = useState('');
   const [inputValue, setInputValue] = useState('');
   const {user} = useSelector(state => state.useReducer);
-  const dispatch = useDispatch();
+  const [availability, setAvailability] = useState(true);
 
 
   useEffect(() => {
@@ -69,11 +69,11 @@ function UserProfileTab({navigation}) {
       UserImage: downloadURL,
     });
     console.log('downloadURL', downloadURL);
-    setIsImageUploaded(true); // <-- Set state variable to true after image upload
+    setIsImageUploaded(true); 
   };
   useEffect(() => {
     if (imagePath !== '' && !isImageUploaded) {
-      // <-- Add check for isImageUploaded
+    
       uploadimage();
       setImagePath('');
     } else if (isImageUploaded) {
@@ -130,35 +130,30 @@ function UserProfileTab({navigation}) {
         });
       });
     } catch (error) {
-      console.log(error);
+      Alert(error)
     }
   };
 
-  const [availability, setAvailability] = useState(true);
+  const toggleAvailability = () => {
+    setAvailability(!availability);
 
-  useEffect(()=>{
     const UserRef = doc(db, 'Users', user);
      updateDoc(UserRef, {
       Availability:availability,
     })
-  },[availability])
-
-  const toggleAvailability = () => {
-    setAvailability(!availability);
   };
 
   return (
     <View style={styles.usercontainer}>
       <View style={styles.userdetails}>
-        {userdata.UserImage !== '' ? (
-          userdata.UserImage && (
+        {userdata.UserImage && userdata.UserImage !== ''? (
             <TouchableOpacity onPress={() => takePhoto()}>
               <Image
                 source={{uri: userdata.UserImage}}
                 style={styles.userimage}
               />
             </TouchableOpacity>
-          )
+          
         ) : (
           <TouchableOpacity onPress={() => takePhoto()}>
             <Image
